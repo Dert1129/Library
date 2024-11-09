@@ -1,13 +1,11 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, ScrollView, Button, TouchableOpacity, Alert } from "react-native";
-import { BookInformationProps, BookInformationRouteProp, HomeScreenProps } from "../types/types";
+import { BookInformationProps } from "../types/types";
 import { List } from "react-native-paper";
 import axios from "axios";
 
 
-export const BookInformation: React.FC<BookInformationProps> = ({route}) => {
-    const navigation = useNavigation<HomeScreenProps>();
+export const BookInformation: React.FC<BookInformationProps> = ({route, navigation}) => {
   const { item } = route.params;
   const [expanded, setExpanded] = useState(false);
   const [descExpanded, setDescExpanded] = useState(false);
@@ -38,13 +36,14 @@ export const BookInformation: React.FC<BookInformationProps> = ({route}) => {
       { cancelable: true }
     );
   };
+
   const deleteBook = (isbn: string) => {
     axios.delete("http://192.168.1.203:3030/api/deleteBook", {
       data: { isbn },
     })
     .then((res) => {
       if (res.status === 200){
-        navigation.navigate("Home", { screen: "Home", params: { refresh: true } });
+        navigation.goBack();
       }
     })
     .catch((error) => {
