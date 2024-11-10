@@ -38,7 +38,9 @@ const App = () => {
                   color="black" 
                   style={{ marginRight: 10 }}
                   onPress={() => {
-                    route.params?.searchPress();;
+                    if (route.params?.searchPress) {
+                        route.params.searchPress();
+                      }
                   }}
                 />
               ),
