@@ -157,6 +157,7 @@ buttonContainer: {
     shadowRadius: 5,
     elevation: 5,
     flexDirection: 'column',
+    top: "2%"
   },
   innerContainer: {
     flexDirection: 'row',
