@@ -22,7 +22,10 @@ export type Book = {
 };
 
 export type RootStackParamList = {
-    Home: { refresh?: boolean };
+    Home: { 
+        refresh?: boolean;
+        searchPress?: () => void; 
+    };
     BookInformation: { item: Book };
     Scan: undefined;
 };
@@ -39,4 +42,9 @@ export type RootStackParamList = {
     read: number;
     route: BookInformationRouteProp;
     navigate: BookInformationNavigationProp;
+}
+
+export interface HomeScreenProps {
+  navigation: HomeNavigationProp;
+  route: HomeRouteProp;
 }

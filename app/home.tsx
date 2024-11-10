@@ -1,12 +1,12 @@
-import { StyleSheet, View, StatusBar, FlatList, TouchableOpacity, Image, Text } from 'react-native';
+import { StyleSheet, View, StatusBar, FlatList, TouchableOpacity, Image, Text, Keyboard, TextInput } from 'react-native';
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
-import { Book, ClickState, HomeNavigationProp } from '../components/types/types';
+import { Book, ClickState, HomeNavigationProp, HomeScreenProps } from '../components/types/types';
 import {  useIsFocused  } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
-export const HomeScreen = () => { 
-    const navigation = useNavigation<HomeNavigationProp>();
+
+export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   const [books, setBooks] = useState([]);
   const [clickState, setClickState] = useState<ClickState>({});
   const axiosConfig = {
@@ -14,6 +14,23 @@ export const HomeScreen = () => {
       'Content-Type': 'application/json',
     },
   };
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const { searchPress, refresh } = route?.params || {};
+
+  const toggleSearch = () => {
+    if (searchPress) {
+      searchPress(); 
+    }
+    setIsSearchActive(true); 
+  };
+
+  const handleCancelSearch = () => {
+    setIsSearchActive(false); 
+    setSearchText(''); 
+    Keyboard.dismiss();
+  };
+
 
   const getBooks = useCallback(() => {
     axios.get('http://192.168.1.203:3030/api/books').then((res) => {
@@ -88,6 +105,22 @@ export const HomeScreen = () => {
   return (
     <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="black" translucent />
+        {isSearchActive && (
+        <View style={styles.searchBox}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search..."
+            value={searchText}
+            onChangeText={setSearchText}
+            autoFocus={true}
+            returnKeyType="done"
+            onSubmitEditing={() => Keyboard.dismiss()}
+          />
+          <TouchableOpacity onPress={handleCancelSearch}>
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      )}
         <FlatList
           data={books}
           renderItem={renderItem}
@@ -99,6 +132,28 @@ export const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    searchBox: {
+        width: '100%',
+        paddingHorizontal: 20,
+        paddingTop: 10,
+        position: 'absolute',
+        top: 70, // Position below the header
+        backgroundColor: 'white',
+        zIndex: 1, // Ensure it appears above other content
+      },
+    searchInput: {
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 20,
+        paddingHorizontal: 15,
+      },
+    cancelText: {
+        marginTop: 5,
+        color: 'blue',
+        textAlign: 'right',
+        fontSize: 14,
+      },
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5"
