@@ -1,11 +1,12 @@
-// HomeScreen.tsx
 import { StyleSheet, View, StatusBar, FlatList, TouchableOpacity, Image, Text } from 'react-native';
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
-import { Book, ClickState, HomeScreenProps } from '../types/types';
+import { Book, ClickState, HomeNavigationProp } from '../components/types/types';
 import {  useIsFocused  } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-export const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => { 
+import { useNavigation } from 'expo-router';
+export const HomeScreen = () => { 
+    const navigation = useNavigation<HomeNavigationProp>();
   const [books, setBooks] = useState([]);
   const [clickState, setClickState] = useState<ClickState>({});
   const axiosConfig = {
@@ -100,7 +101,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    backgroundColor: "#f5f5f5"
   }, 
   bookmark: {
     display: 'flex',

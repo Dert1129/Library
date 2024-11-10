@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, ScrollView, Button, TouchableOpacity, Alert } from "react-native";
-import { BookInformationProps } from "../types/types";
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { BookInformationNavigationProp, BookInformationRouteProp } from "@/components/types/types";
 import { List } from "react-native-paper";
 import axios from "axios";
+import { useNavigation } from "expo-router";
+import { useRoute } from "@react-navigation/native";
 
-
-export const BookInformation: React.FC<BookInformationProps> = ({route, navigation}) => {
-  const { item } = route.params;
+export const BookInformation = () => {
+    const navigation = useNavigation<BookInformationNavigationProp>();
+  const route = useRoute<BookInformationRouteProp>();
+  const {item } = route.params;
   const [expanded, setExpanded] = useState(false);
   const [descExpanded, setDescExpanded] = useState(false);
 
@@ -43,7 +46,7 @@ export const BookInformation: React.FC<BookInformationProps> = ({route, navigati
     })
     .then((res) => {
       if (res.status === 200){
-        navigation.goBack();
+        navigation.navigate("Home", {refresh: true});
       }
     })
     .catch((error) => {
@@ -55,7 +58,6 @@ export const BookInformation: React.FC<BookInformationProps> = ({route, navigati
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.bookContainer}>
-        {/* Image and Text Container */}
         <View style={styles.innerContainer}>
           <View style={styles.imageContainer}>
             <Image source={{ uri: item.imageLink }} style={styles.bookImage} />
@@ -106,27 +108,27 @@ export const BookInformation: React.FC<BookInformationProps> = ({route, navigati
 };
 
 const styles = StyleSheet.create({
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-      },
-      button: {
-        width: '45%',
-        paddingVertical: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-      },
-      editButton: {
-        backgroundColor: '#007BFF',
-      },
-      deleteButton: {
-        backgroundColor: '#FF0000',
-      },
-      buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-      },
+buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  button: {
+    width: '45%',
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  editButton: {
+    backgroundColor: '#007BFF',
+  },
+  deleteButton: {
+    backgroundColor: '#FF0000',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   accordionItem: {
     color: 'black',
   },
@@ -142,7 +144,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: '#f5f5f5',
-    marginTop: "3%",
     alignItems: 'center',
   },
   bookContainer: {

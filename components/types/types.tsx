@@ -5,6 +5,7 @@ export type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, '
 export type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>;
 export type BookInformationNavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookInformation'>;
 export type BookInformationRouteProp = RouteProp<RootStackParamList, 'BookInformation'>;
+export type ClickState = { [isbn: string]: boolean };
 
 export type Book = {
     read: number;
@@ -25,8 +26,6 @@ export type RootStackParamList = {
     BookInformation: { item: Book };
     Scan: undefined;
 };
-  
-
   export interface BookInformationProps{
     title: string;
     authorName: string;
@@ -38,21 +37,6 @@ export type RootStackParamList = {
     publisher: string;
     copies: number;
     read: number;
-    route: RouteProp<RootStackParamList, 'BookInformation'>;
-    navigation: NativeStackNavigationProp<RootStackParamList, 'BookInformation'>;
-}
-
-export interface BookInformationProps {
     route: BookInformationRouteProp;
-    navigation: BookInformationNavigationProp;
+    navigate: BookInformationNavigationProp;
 }
-
-export type ClickState = { [isbn: string]: boolean };
-
-export type HomeScreenProps = {
-    navigation: HomeNavigationProp;
-}
-
-
-
-

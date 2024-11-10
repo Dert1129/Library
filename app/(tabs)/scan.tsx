@@ -6,7 +6,7 @@ import React from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useIsFocused } from '@react-navigation/native';
 
-export default function Scanner() {
+export default function ScanScreen() {
     const [facing, setFacing] = useState<CameraType>('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [scanned, setScanned] = useState<boolean>(false);

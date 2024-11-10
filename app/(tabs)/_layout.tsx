@@ -1,42 +1,35 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Tabs } from 'expo-router';
+import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 
-import { TabBarIcon } from '../../components/navigation/TabBarIcon';
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from '@/hooks/useColorScheme';
-import {HomeScreen} from '@/components/Home/home';
-import ScanScreen from '@/components/Scan/scan';
-
-const Tab = createBottomTabNavigator();
-
-export default function TabLayout() {
-    const colorScheme = useColorScheme();
-  
-    return (
-      <Tab.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          headerShown: false,
+export default function Layout() {
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false, 
+        tabBarStyle: {
+          backgroundColor: 'white',
+          borderTopColor: 'transparent',
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'book' : 'book-outline'} color={color} />
+          ),
         }}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'book' : 'book-outline'} color={color} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Scan"
-          component={ScanScreen}
-          options={{
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'barcode' : 'barcode-outline'} color={color} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    );
-  }
+      />
+      <Tabs.Screen
+        name="scan"
+        options={{
+          tabBarLabel: 'Scan',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'barcode' : 'barcode-outline'} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
