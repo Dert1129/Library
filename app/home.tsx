@@ -105,22 +105,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   return (
     <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="black" translucent />
-        {isSearchActive && (
-        <View style={styles.searchBox}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search..."
-            value={searchText}
-            onChangeText={setSearchText}
-            autoFocus={true}
-            returnKeyType="done"
-            onSubmitEditing={() => Keyboard.dismiss()}
-          />
-          <TouchableOpacity onPress={handleCancelSearch}>
-            <Text style={styles.cancelText}>Cancel</Text>
-          </TouchableOpacity>
-        </View>
-      )}
         <FlatList
           data={books}
           renderItem={renderItem}

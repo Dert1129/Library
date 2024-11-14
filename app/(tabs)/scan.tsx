@@ -5,12 +5,15 @@ import axios from 'axios';
 import React from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';
+import { AddBookNavigationProp } from '@/components/types/types';
 
 export default function ScanScreen() {
     const [facing, setFacing] = useState<CameraType>('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [scanned, setScanned] = useState<boolean>(false);
     const [scannedData, setScannedData] = useState<string | null>(null);
+    const navigation = useNavigation<AddBookNavigationProp>();
     const axiosConfig = {
         headers: {
             "Content-Type": "application/json"
@@ -49,8 +52,18 @@ export default function ScanScreen() {
                     ]
                 )
             }
-            else{
-                alert("This book has been added to your Library")
+            else if(response.data == "There was a problem adding the book"){
+                Alert.alert("Error", "There was a problem adding the book. Try manually?",
+                    [
+                        {
+                            text: "No"
+                        },
+                        {
+                            text: "Yes",
+                            onPress: () => navigation.navigate("AddBook")
+                        }
+                    ]
+                )
             }
         } catch (error) {
             alert(`${data}`)
@@ -107,6 +120,13 @@ export default function ScanScreen() {
 }
 
 const styles = StyleSheet.create({
+    plus: {
+        alignItems: "flex-end",
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        width: 50, 
+        height: 50, 
+        borderRadius: 25,
+    },
     overlay: {
         top: 325,
         left: 40,
