@@ -6,6 +6,7 @@ import { PaperProvider } from 'react-native-paper';
 import { RootStackParamList } from '@/components/types/types';
 import { BookInformation } from '../BookInformation';
 import AddBookScreen from '../AddBook';
+import EditBookScreen from '../EditBook';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
@@ -29,10 +30,15 @@ const App = () => {
           component={BookInformation} 
           options={{ title: "Book Information"}}/>
 
-          <Stack.Screen 
+        <Stack.Screen 
           name="AddBook" 
           component={AddBookScreen} 
           options={{title: "Add Book"}}/>
+
+        <Stack.Screen 
+          name="EditBook" 
+          component={EditBookScreen} 
+          options={{title: "Edit Book"}}/>
         </Stack.Navigator>
     </PaperProvider>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
-import { BookInformationNavigationProp, BookInformationRouteProp } from "@/components/types/types";
+import { Book, BookInformationNavigationProp, BookInformationRouteProp, EditBookNavigationProp } from "@/components/types/types";
 import { List } from "react-native-paper";
 import axios from "axios";
 import { useNavigation } from "expo-router";
@@ -9,6 +9,7 @@ import { useRoute } from "@react-navigation/native";
 export const BookInformation = () => {
     const navigation = useNavigation<BookInformationNavigationProp>();
   const route = useRoute<BookInformationRouteProp>();
+  const editNavigation = useNavigation<EditBookNavigationProp>();
   const {item } = route.params;
   const [expanded, setExpanded] = useState(false);
   const [descExpanded, setDescExpanded] = useState(false);
@@ -53,6 +54,10 @@ export const BookInformation = () => {
       console.error(error);
     });
   };
+
+  const handleEditPress = (item: Book) => {
+    navigation.navigate("EditBook", {item});
+  }
   
 
   return (
@@ -94,7 +99,7 @@ export const BookInformation = () => {
           </List.Accordion>
         </List.Section>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.editButton]}>
+          <TouchableOpacity onPress={() => handleEditPress(item)} style={[styles.button, styles.editButton]}>
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDeletePress(item.isbn)} style={[styles.button, styles.deleteButton]}>

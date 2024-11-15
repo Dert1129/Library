@@ -18,6 +18,11 @@ const EditBookScreen  = () => {
   const [publisher, setPublisher] = useState(item.publisher);
   const [genre, setGenre] = useState(item.genre);
   const [copies, setCopies] = useState(String(item.copies));
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
 
   const [errors, setErrors] = useState<Errors>({
     title: '',
@@ -68,7 +73,7 @@ const EditBookScreen  = () => {
     };
 
     try {
-      const response = await axios.put(`http://192.168.1.203:3030/api/addManual`, updatedBookData);
+      const response = await axios.post(`http://192.168.1.203:3030/api/addManual`, {updatedBookData}, axiosConfig);
       if (response.status === 200) {
         Alert.alert('Success', 'Book information has been updated!');
         navigation.goBack(); 
