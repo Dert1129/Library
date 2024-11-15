@@ -1,14 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
-export type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
-export type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>;
-export type BookInformationNavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookInformation'>;
-export type BookInformationRouteProp = RouteProp<RootStackParamList, 'BookInformation'>;
-export type ScanNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Scan'>;
-export type ScanRouteProp = RouteProp<RootStackParamList, 'Scan'>;
-export type AddBookNavigationProp = NativeStackNavigationProp<RootStackParamList, 'AddBook'>;
-export type AddBookRouteProp = RouteProp<RootStackParamList, 'AddBook'>;
 export type ClickState = { [isbn: string]: boolean };
 
 export type Book = {
@@ -43,7 +34,11 @@ export type RootStackParamList = {
     BookInformation: { item: Book };
     Scan: undefined;
     AddBook: undefined;
+    EditBook: {item: Book};
 };
+
+export type BookInformationNavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookInformation'>;
+export type BookInformationRouteProp = RouteProp<RootStackParamList, 'BookInformation'>;
   export interface BookInformationProps{
     title: string;
     authorName: string;
@@ -59,17 +54,40 @@ export type RootStackParamList = {
     navigate: BookInformationNavigationProp;
 }
 
+export type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+export type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>;
 export interface HomeScreenProps {
   navigation: HomeNavigationProp;
   route: HomeRouteProp;
 }
 
+export type ScanNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Scan'>;
+export type ScanRouteProp = RouteProp<RootStackParamList, 'Scan'>;
 export interface ScanScreenProps {
     navigation: ScanNavigationProp;
     route: ScanRouteProp;
   }
 
-  export interface AddBookProps {
+  export type AddBookNavigationProp = NativeStackNavigationProp<RootStackParamList, 'AddBook'>;
+  export type AddBookRouteProp = RouteProp<RootStackParamList, 'AddBook'>;
+export interface AddBookProps {
     navigation: AddBookNavigationProp;
     route: AddBookRouteProp;
+}
+
+export type EditBookNavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditBook'>;
+export type EditBookRouteProp = RouteProp<RootStackParamList, 'EditBook'>;
+export interface EditBookProps {
+    title: string;
+    authorName: string;
+    isbn: string;
+    description: string;
+    genre: string;
+    imageLink: string;
+    category: string;
+    publisher: string;
+    copies: number;
+    read: number;
+    navigate: EditBookNavigationProp;
+    route: EditBookRouteProp;
   }
