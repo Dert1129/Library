@@ -21,7 +21,7 @@ export const BookInformation = () => {
   const fetchBookData = async () => {
     try {
       const response = await axios.get(`http://192.168.1.203:3030/api/getBook?id=${id}`);
-      console.log(response.data);
+    //   console.log(response.data);
       if (response.status === 200 && response.data) {
         setBookData(response.data);
       }
@@ -33,10 +33,10 @@ export const BookInformation = () => {
 
   useEffect(() => {
     if (isFocused) {
-        console.log("BookInformation screen is in focus")
+        // console.log("BookInformation screen is in focus")
       fetchBookData();
     } else {
-      console.log("BookInformation screen is unfocused");
+    //   console.log("BookInformation screen is unfocused");
     }
   }, [isFocused]);
 
@@ -84,12 +84,20 @@ export const BookInformation = () => {
     );
   }
 
+  const handleImage = (imageLink: string) => {
+    if (imageLink == null || imageLink.length == 0){
+        return <Image source={require("@/assets/images/book-not-found.png")} style={styles.bookImage} />
+    }else{
+        return <Image source={{uri: imageLink}} style={styles.bookImage} />
+    }
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.bookContainer}>
         <View style={styles.innerContainer}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: bookData.imageLink }} style={styles.bookImage} />
+            {handleImage(bookData.imageLink)}
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.title}>{bookData.title}</Text>

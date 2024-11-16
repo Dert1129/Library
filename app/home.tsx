@@ -6,6 +6,7 @@ import {  useIsFocused  } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 
+
 export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   const [books, setBooks] = useState([]);
   const [clickState, setClickState] = useState<ClickState>({});
@@ -16,6 +17,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   };
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [image, setImage] = useState('');
   const { searchPress, refresh } = route?.params || {};
 
   const toggleSearch = () => {
@@ -45,14 +47,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   }, []);
 
   const isFocused = useIsFocused();
-  console.log("Is homepage focused? " + isFocused);
+//   console.log("Is homepage focused? " + isFocused);
+
+  const handleImage = (imageLink: string) => {
+    if (imageLink == null || imageLink.length == 0){
+        return <Image source={require("@/assets/images/book-not-found.png")} style={styles.bookImage} />
+    }else{
+        return <Image source={{uri: imageLink}} style={styles.bookImage} />
+    }
+  }
+
 
 
   useEffect(() => {
     if (isFocused) {
       getBooks();
-    } else {
-      console.log('HomeScreen is unfocused'); 
     }
   }, [isFocused, getBooks]);
   
@@ -93,7 +102,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
             </TouchableOpacity>
           </View>
         )}
-        <Image source={{ uri: item.imageLink }} style={styles.bookImage} />
+        {handleImage(item.imageLink)}
         <View style={styles.bookInfo}>
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.author}>Author: {item.authorName}</Text>
