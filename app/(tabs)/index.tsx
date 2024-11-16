@@ -5,7 +5,7 @@ import {HomeScreen} from '@/app/home';
 import { PaperProvider } from 'react-native-paper';
 import { RootStackParamList } from '@/components/types/types';
 import { BookInformation } from '../BookInformation';
-import AddBookScreen from '../AddBook';
+import AddBookScreen from './AddBook';
 import EditBookScreen from '../EditBook';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

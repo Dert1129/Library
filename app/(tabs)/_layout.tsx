@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Layout() {
   return (
@@ -30,6 +31,15 @@ export default function Layout() {
           ),
         }}
       />
+      <Tabs.Screen
+      name="AddBook"
+      options={{
+        tabBarLabel:"",
+        tabBarIcon: ({color, focused}) => (
+            <TabBarIcon name='add' color={color}/>  
+
+        ),
+      }} />
     </Tabs>
   );
 }

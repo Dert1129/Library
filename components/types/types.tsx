@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 export type ClickState = { [isbn: string]: boolean };
 
 export type Book = {
+    id: number;
     read: number;
     copies: number;
     category: string;
@@ -31,7 +32,7 @@ export type RootStackParamList = {
         refresh?: boolean;
         searchPress?: () => void; 
     };
-    BookInformation: { isbn: string, refresh?: boolean };
+    BookInformation: { id: number, refresh?: boolean };
     Scan: undefined;
     AddBook: undefined;
     EditBook: {item: Book};
@@ -40,6 +41,7 @@ export type RootStackParamList = {
 export type BookInformationNavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookInformation'>;
 export type BookInformationRouteProp = RouteProp<RootStackParamList, 'BookInformation'>;
   export interface BookInformationProps{
+    id: number;
     title: string;
     authorName: string;
     isbn: string;

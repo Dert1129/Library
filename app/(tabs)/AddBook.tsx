@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, StatusBar } from 'react-native';
 import axios from 'axios';
 import { Errors } from '@/components/types/types';
 import { ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -64,8 +64,10 @@ const AddBookScreen = () => {
     };
 
     try {
-      const response = await axios.post('https://your-api-endpoint.com/books', bookData);
-      if (response.status === 200) {
+      const response = await axios.post('http://192.168.1.203:3030/api/addManual', bookData);
+      if (response.data === "Book could not be found") {
+        Alert.alert('Error', 'Book could not be found');
+      }else{
         Alert.alert('Success', 'Book information has been saved!');
         setTitle('');
         setCategory('');
@@ -92,6 +94,7 @@ const AddBookScreen = () => {
 
   return (
     <GestureHandlerRootView style={styles.rootContainer}>
+        <StatusBar barStyle="light-content" backgroundColor="black" translucent />
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
                 <Text style={styles.label}>Title</Text>
@@ -134,15 +137,18 @@ const AddBookScreen = () => {
 export default AddBookScreen;
 
 const styles = StyleSheet.create({
-    rootContainer: {
-        flex: 1,
-      },
-      scrollContainer: {
-        flexGrow: 1,
-      },
+  rootContainer: {
+      flex: 1,
+      marginTop: "auto"
+    },
+    scrollContainer: {
+      flexGrow: 1,
+    },
   container: {
     flex: 1,
-    padding: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 50,
     backgroundColor: '#fff',
     overflow: "scroll"
   },

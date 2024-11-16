@@ -9,7 +9,7 @@ import { useRoute, useFocusEffect, useIsFocused } from "@react-navigation/native
 export const BookInformation = () => {
   const navigation = useNavigation<BookInformationNavigationProp>();
   const route = useRoute<BookInformationRouteProp>();
-  const { isbn } = route.params;
+  const { id } = route.params;
 
   const [bookData, setBookData] = useState<Book | null>(null);
   const [expanded, setExpanded] = useState(false);
@@ -20,7 +20,7 @@ export const BookInformation = () => {
 
   const fetchBookData = async () => {
     try {
-      const response = await axios.get(`http://192.168.1.203:3030/api/getBook?isbn=${isbn}`);
+      const response = await axios.get(`http://192.168.1.203:3030/api/getBook?id=${id}`);
       console.log(response.data);
       if (response.status === 200 && response.data) {
         setBookData(response.data);
@@ -33,13 +33,14 @@ export const BookInformation = () => {
 
   useEffect(() => {
     if (isFocused) {
+        console.log("BookInformation screen is in focus")
       fetchBookData();
     } else {
       console.log("BookInformation screen is unfocused");
     }
   }, [isFocused]);
 
-  const handleDeletePress = (isbn: string) => {
+  const handleDeletePress = (id: number) => {
     Alert.alert(
       "Delete Book?",
       "Are you sure you want to delete this book?",
@@ -48,7 +49,7 @@ export const BookInformation = () => {
         {
           text: "Yes",
           onPress: () => {
-            deleteBook(isbn);
+            deleteBook(id);
           },
         },
       ],
@@ -56,10 +57,10 @@ export const BookInformation = () => {
     );
   };
 
-  const deleteBook = async (isbn: string) => {
+  const deleteBook = async (id: number) => {
     try {
       const response = await axios.delete("http://192.168.1.203:3030/api/deleteBook", {
-        data: { isbn },
+        data: { id },
       });
       if (response.status === 200) {
         navigation.navigate("Home", { refresh: true });
@@ -125,7 +126,7 @@ export const BookInformation = () => {
           <TouchableOpacity onPress={() => handleEditPress(bookData)} style={[styles.button, styles.editButton]}>
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDeletePress(bookData.isbn)} style={[styles.button, styles.deleteButton]}>
+          <TouchableOpacity onPress={() => handleDeletePress(bookData.id)} style={[styles.button, styles.deleteButton]}>
             <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
         </View>

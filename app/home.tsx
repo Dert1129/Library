@@ -57,16 +57,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   }, [isFocused, getBooks]);
   
 
-  const setBookAsRead = (isbn: string): void => {
-    const currentRead = clickState[isbn] ? 1 : 0;
+  const setBookAsRead = (id: number): void => {
+    const currentRead = clickState[id] ? 1 : 0;
     const newRead = currentRead === 1 ? 0 : 1;
     setClickState((prevState: any) => ({
       ...prevState,
-      [isbn]: newRead === 1,
+      [id]: newRead === 1,
     }));
 
     axios
-      .post('http://192.168.1.203:3030/api/markRead', { isbn: isbn, read: newRead }, axiosConfig)
+      .post('http://192.168.1.203:3030/api/markRead', { id: id, read: newRead }, axiosConfig)
       .then((res) => {
         console.log(res.data);
       })
@@ -77,18 +77,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
 
   const renderItem = ({ item }: { item: Book }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate('BookInformation', { isbn:item.isbn })}
+      onPress={() => navigation.navigate('BookInformation', { id:item.id })}
     >
       <View style={styles.bookContainer}>
-        {!clickState[item.isbn] ? (
+        {!clickState[item.id] ? (
           <View style={styles.bookmark}>
-            <TouchableOpacity key={item.isbn} onPress={() => setBookAsRead(item.isbn)}>
+            <TouchableOpacity key={item.id} onPress={() => setBookAsRead(item.id)}>
               <Ionicons name={'bookmark-outline'} size={32} />
             </TouchableOpacity>
           </View>
         ) : (
           <View style={styles.bookmark}>
-            <TouchableOpacity key={item.isbn} onPress={() => setBookAsRead(item.isbn)}>
+            <TouchableOpacity key={item.id} onPress={() => setBookAsRead(item.id)}>
               <Ionicons name={'bookmark'} size={32} />
             </TouchableOpacity>
           </View>
@@ -108,7 +108,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         <FlatList
           data={books}
           renderItem={renderItem}
-          keyExtractor={(item) => item.isbn}
+          keyExtractor={(item) => item.id.toString()}
         />
     </View>
     

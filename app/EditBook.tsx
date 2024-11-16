@@ -11,6 +11,7 @@ const EditBookScreen  = () => {
   const route = useRoute<EditBookRouteProp>();
   const { item } = route.params;
   
+  const [id, setId] = useState(item.id);
   const [title, setTitle] = useState(item.title);
   const [category, setCategory] = useState(item.category);
   const [isbn, setIsbn] = useState(item.isbn);
@@ -63,6 +64,7 @@ const EditBookScreen  = () => {
     if (!validateFields()) return;
 
     const updatedBookData = {
+        id, 
         title,
         category,
         isbn,
@@ -71,12 +73,13 @@ const EditBookScreen  = () => {
         publisher,
         copies: Number(copies),
       };
+      console.log(updatedBookData);
 
     try {
       const response = await axios.post(`http://192.168.1.203:3030/api/editBook`, updatedBookData, axiosConfig);
-      if (response.status === 200) {
+      if (response.data === "Updated book") {
         Alert.alert('Success', 'Book information has been updated!');
-        navigation.navigate("BookInformation", {isbn: item.isbn}); 
+        navigation.navigate("BookInformation", {id: item.id}); 
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to update book information. Please try again.');
