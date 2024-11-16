@@ -76,7 +76,7 @@ const EditBookScreen  = () => {
       const response = await axios.post(`http://192.168.1.203:3030/api/editBook`, updatedBookData, axiosConfig);
       if (response.status === 200) {
         Alert.alert('Success', 'Book information has been updated!');
-        navigation.goBack(); 
+        navigation.navigate("BookInformation", {isbn: item.isbn}); 
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to update book information. Please try again.');

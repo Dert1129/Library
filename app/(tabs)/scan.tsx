@@ -38,7 +38,6 @@ export default function ScanScreen() {
 
         try {
             const response = await axios.post('http://192.168.1.203:3030/api/addBook?isbn=' + data, axiosConfig);
-            console.log('API response:', response.data);
             if (response.data == "This book already exists"){
                 Alert.alert(`Book Exists`, "This book already exists in your library. Add anyway?",
                     [
@@ -88,8 +87,6 @@ export default function ScanScreen() {
         setScanned(false);
         setScannedData(null);
     }
-
-    console.log("Scanner is focused? " + isFocused)
 
     return (
         <View style={styles.container}>
@@ -149,12 +146,12 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         position: 'absolute',
-        bottom: 30, // Position at the bottom of the screen
-        left: 0,    // Align to the left edge
-        right: 0,   // Align to the right edge
+        bottom: 30,
+        left: 0,    
+        right: 0,   
         justifyContent: 'center',
-        alignItems: 'center', // Center both the button and the text horizontally
-        flexDirection: 'column', // Stack the button and text vertically
+        alignItems: 'center', 
+        flexDirection: 'column', 
     },
     button: {
         alignItems: 'center',

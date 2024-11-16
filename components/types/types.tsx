@@ -31,7 +31,7 @@ export type RootStackParamList = {
         refresh?: boolean;
         searchPress?: () => void; 
     };
-    BookInformation: { item: Book };
+    BookInformation: { isbn: string, refresh?: boolean };
     Scan: undefined;
     AddBook: undefined;
     EditBook: {item: Book};

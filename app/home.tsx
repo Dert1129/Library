@@ -77,7 +77,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
 
   const renderItem = ({ item }: { item: Book }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate('BookInformation', { item })}
+      onPress={() => navigation.navigate('BookInformation', { isbn:item.isbn })}
     >
       <View style={styles.bookContainer}>
         {!clickState[item.isbn] ? (
@@ -121,9 +121,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 10,
         position: 'absolute',
-        top: 70, // Position below the header
+        top: 70, 
         backgroundColor: 'white',
-        zIndex: 1, // Ensure it appears above other content
+        zIndex: 1, 
       },
     searchInput: {
         height: 40,
