@@ -7,7 +7,7 @@ import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 
 export const BookInformation = () => {
-    const navigation = useNavigation<BookInformationNavigationProp>();
+  const navigation = useNavigation<BookInformationNavigationProp>();
   const route = useRoute<BookInformationRouteProp>();
   const editNavigation = useNavigation<EditBookNavigationProp>();
   const {item } = route.params;

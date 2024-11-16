@@ -63,17 +63,17 @@ const EditBookScreen  = () => {
     if (!validateFields()) return;
 
     const updatedBookData = {
-      title,
-      category,
-      isbn,
-      authorName,
-      publisher,
-      genre,
-      copies: Number(copies),
-    };
+        title,
+        category,
+        isbn,
+        authorName,
+        genre,
+        publisher,
+        copies: Number(copies),
+      };
 
     try {
-      const response = await axios.post(`http://192.168.1.203:3030/api/addManual`, {updatedBookData}, axiosConfig);
+      const response = await axios.post(`http://192.168.1.203:3030/api/editBook`, updatedBookData, axiosConfig);
       if (response.status === 200) {
         Alert.alert('Success', 'Book information has been updated!');
         navigation.goBack(); 
