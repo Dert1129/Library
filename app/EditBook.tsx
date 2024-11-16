@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { EditBookNavigationProp, EditBookRouteProp, Errors } from '@/components/types/types';
 import { ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 const EditBookScreen  = () => {
@@ -19,6 +21,12 @@ const EditBookScreen  = () => {
   const [publisher, setPublisher] = useState(item.publisher);
   const [genre, setGenre] = useState(item.genre);
   const [copies, setCopies] = useState(String(item.copies));
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [endDateOpen, setEndDateOpen] = useState(false);
+  const [startDateOpen, setStartDateOpen] = useState(false);
+
+
   const axiosConfig = {
     headers: {
       'Content-Type': 'application/json',
@@ -33,6 +41,8 @@ const EditBookScreen  = () => {
     publisher: '',
     genre: '',
     copies: '',
+    startDate: '',
+    endDate: '',
   });
 
   const validateFields = () => {
@@ -44,6 +54,8 @@ const EditBookScreen  = () => {
       publisher: '',
       genre: '',
       copies: '',
+      startDate: '',
+      endDate: '',
     };
 
     if (!title) newErrors.title = 'Title is required';
@@ -55,13 +67,32 @@ const EditBookScreen  = () => {
     if (!copies || isNaN(Number(copies)) || Number(copies) <= 0 || !Number.isInteger(Number(copies))) {
       newErrors.copies = 'Copies must be a positive whole number';
     }
+    if(startDate.getTime() > endDate.getTime()) {
+        newErrors.startDate = "Start date must be less than or equal to the end date"
+        newErrors.endDate = "End date must be greater than or equal to the start date"
+    }
 
+  
+    
     setErrors(newErrors);
     return Object.values(newErrors).every(error => error === '');
   };
 
+  const handleStartDateConfirm = (date: Date) => {
+    setStartDate(date);
+    setStartDateOpen(false);
+  };
+
+  const handleEndDateConfirm = (date: Date) => {
+    setEndDate(date);
+    setEndDateOpen(false);
+  };
+
   const handleUpdate = async () => {
     if (!validateFields()) return;
+    const formatDate = (date: Date): string => {
+        return date.toISOString().split('T')[0];
+      };
 
     const updatedBookData = {
         id, 
@@ -72,6 +103,8 @@ const EditBookScreen  = () => {
         genre,
         publisher,
         copies: Number(copies),
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
       };
       console.log(updatedBookData);
 
@@ -107,6 +140,32 @@ const EditBookScreen  = () => {
           {errors.authorName ? <Text style={styles.errorText}>{errors.authorName}</Text> : null}
           <TextInput style={styles.input} value={authorName} onChangeText={setAuthorName} placeholder="Enter author name" />
 
+          <Text style={styles.label}>Start Date</Text>
+          {errors.startDate ? <Text style={styles.errorText}>{errors.startDate}</Text> : null}
+          <TouchableOpacity onPress={() => setStartDateOpen(true)}>
+            <Text style={styles.dateText}>{startDate.toDateString()}</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={startDateOpen}
+            mode="date"
+            onConfirm={handleStartDateConfirm}
+            onCancel={() => setStartDateOpen(false)}
+            style={styles.calendar}
+          />
+
+          <Text style={styles.label}>End Date</Text>
+          {errors.endDate ? <Text style={styles.errorText}>{errors.endDate}</Text> : null}
+          <TouchableOpacity onPress={() => setEndDateOpen(true)}>
+            <Text style={styles.dateText}>{endDate.toDateString()}</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={endDateOpen}
+            mode="date"
+            onConfirm={handleEndDateConfirm}
+            onCancel={() => setEndDateOpen(false)}
+            style={styles.calendar}
+          />
+
           <Text style={styles.label}>Publisher</Text>
           {errors.publisher ? <Text style={styles.errorText}>{errors.publisher}</Text> : null}
           <TextInput style={styles.input} value={publisher} onChangeText={setPublisher} placeholder="Enter publisher" />
@@ -129,6 +188,19 @@ const EditBookScreen  = () => {
 export default EditBookScreen;
 
 const styles = StyleSheet.create({
+   calendar: {
+    width: 1000
+   },
+    dateText: {
+        height: 40,
+        paddingHorizontal: 10,
+        marginTop: 5,
+        lineHeight: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        backgroundColor: '#f9f9f9',
+      },
   rootContainer: {
     flex: 1,
   },

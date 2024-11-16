@@ -117,6 +117,8 @@ export const BookInformation = () => {
             <List.Item titleStyle={styles.accordionItem} title={`Publisher: ${bookData.publisher}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Genre: ${bookData.genre}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Category: ${bookData.category}`} />
+            <List.Item titleStyle={styles.accordionItem} title={`Start Date: ${bookData.startDate}`} />
+            <List.Item titleStyle={styles.accordionItem} title={`End Date: ${bookData.endDate}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Copies: ${bookData.copies}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Read? ${bookData.read === 1 ? "Yes" : "No"}`} />
           </List.Accordion>

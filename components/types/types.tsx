@@ -15,6 +15,8 @@ export type Book = {
     imageLink: string;
     isRead: boolean;
     description: string;
+    startDate: Date;
+    endDate: Date;
 };
 
 export type Errors = {
@@ -25,6 +27,8 @@ export type Errors = {
     publisher: string;
     genre: string;
     copies: string;
+    startDate: string;
+    endDate: string;
   };
 
 export type RootStackParamList = {
@@ -52,6 +56,8 @@ export type BookInformationRouteProp = RouteProp<RootStackParamList, 'BookInform
     publisher: string;
     copies: number;
     read: number;
+    startDate: Date;
+    endDate: Date;
     route: BookInformationRouteProp;
     navigate: BookInformationNavigationProp;
 }
@@ -90,6 +96,8 @@ export interface EditBookProps {
     publisher: string;
     copies: number;
     read: number;
+    startDate: Date;
+    endDate: Date;
     navigate: EditBookNavigationProp;
     route: EditBookRouteProp;
   }
