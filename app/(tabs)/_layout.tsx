@@ -6,13 +6,30 @@ export default function Layout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false, 
         tabBarStyle: {
           backgroundColor: 'white',
           borderTopColor: 'transparent',
         },
       }}
     >
+         <Tabs.Screen
+      name="AddBook"
+      options={{
+        tabBarLabel:"Add Book",
+        tabBarIcon: ({color, focused}) => (
+            <TabBarIcon name='add' color={color}/>  
+
+        ),
+        headerShown: true,
+        headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTitleStyle: {
+            color: 'black',
+          },
+        headerTitle: "Add Book"
+      }} />
+
       <Tabs.Screen
         name="index"
         options={{
@@ -20,6 +37,7 @@ export default function Layout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'book' : 'book-outline'} color={color} />
           ),
+          headerShown: false
         }}
       />
       <Tabs.Screen
@@ -29,17 +47,10 @@ export default function Layout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'barcode' : 'barcode-outline'} color={color} />
           ),
+          headerShown: false
         }}
       />
-      <Tabs.Screen
-      name="AddBook"
-      options={{
-        tabBarLabel:"",
-        tabBarIcon: ({color, focused}) => (
-            <TabBarIcon name='add' color={color}/>  
-
-        ),
-      }} />
+     
     </Tabs>
   );
 }

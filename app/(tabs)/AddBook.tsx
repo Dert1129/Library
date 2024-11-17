@@ -21,6 +21,8 @@ const AddBookScreen = () => {
     publisher: '',
     genre: '',
     copies: '',
+    startDate: '',
+    endDate: '',
   });
 
 
@@ -33,6 +35,8 @@ const AddBookScreen = () => {
       publisher: '',
       genre: '',
       copies: '',
+      startDate: '',
+      endDate: '',
     };
 
     if (!title) newErrors.title = 'Title is required';
@@ -84,6 +88,8 @@ const AddBookScreen = () => {
           publisher: '',
           genre: '',
           copies: '',
+          startDate: '',
+          endDate: '',
         });
       }
     } catch (error) {
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 50,
+    paddingTop: 20,
     backgroundColor: '#fff',
     overflow: "scroll"
   },
