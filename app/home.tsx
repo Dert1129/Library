@@ -90,7 +90,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
     <TouchableOpacity
       onPress={() => navigation.navigate('BookInformation', { id:item.id })}
     >
-      <View style={styles.bookContainer}>
+      <View style={styles.bookItem}>
         {!clickState[item.id] ? (
           <View style={styles.bookmark}>
             <TouchableOpacity key={item.id} onPress={() => setBookAsRead(item.id)}>
@@ -106,10 +106,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         )}
         {handleImage(item.imageLink)}
         <View style={styles.bookInfo}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.author}>Author: {item.authorName}</Text>
-          {item.genre? <Text style={styles.author}>Genre: {item.genre.replace(/[\[\]]/g, "")}</Text> : null}
-          
+          <Text style={styles.bookTitle}>{item.title}</Text>
+          <Text style={styles.bookDetails}>Author: {item.authorName}</Text>
+          {item.genre? <Text style={styles.bookDetails}>Genre: {item.genre.replace(/[\[\]]/g, "")}</Text> : null}
         </View>
       </View>
     </TouchableOpacity>
@@ -129,6 +128,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+    bookItem: {
+        flexDirection: 'row',
+        backgroundColor: "#fff",
+        padding: 16,
+        marginBottom: 10,
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        shadowOffset: { width: 0, height: 2 },
+        elevation: 2,
+      },
+      bookTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 4,
+      },
+      bookDetails: {
+        fontSize: 14,
+        color: "#555",
+      },
     searchBox: {
         width: '100%',
         paddingHorizontal: 20,
@@ -151,39 +171,20 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         fontSize: 14,
       },
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5"
-  }, 
-  bookmark: {
-    display: 'flex',
-    alignSelf: 'flex-start',
-  },
-  author: {
-    color: '#6c757d',
-    fontSize: 16,
-  },
-  bookContainer: {
-    flexDirection: 'row',
-    paddingRight: 10,
-    paddingTop: 40,
-    paddingBottom: 40,
-    paddingLeft: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    backgroundColor: '#fff',
-    margin: 1,
-  },
-  bookImage: {
-    width: 50,
-    height: 100,
-    marginRight: 10,
-  },
-  bookInfo: {
-    flex: 1,
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 23,
+    container: {
+      flex: 1,
+      backgroundColor: "#f5f5f5"
+    }, 
+    bookmark: {
+      display: 'flex',
+      alignSelf: 'flex-start',
+    },
+    bookImage: {
+      width: 50,
+      height: 100,
+      marginRight: 10,
+    },
+    bookInfo: {
+      flex: 1,
   },
 });
