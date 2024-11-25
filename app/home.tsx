@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Book, ClickState, HomeNavigationProp, HomeScreenProps } from '../components/types/types';
 import {  useIsFocused  } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
     const [books, setBooks] = useState([]);
@@ -20,13 +21,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
 
     const getBooks = useCallback(() => {
         axios.get(`http://${endpoint}:3030/api/books`).then((res) => {
-        const sortBooks = res.data.sort((a: Book, b: Book) => a.title.localeCompare(b.title));
-        setBooks(sortBooks);
-        const initialClickState: ClickState = {};
-        res.data.forEach((book: Book) => {
-            initialClickState[book.isbn] = book.isRead === true;
-        });
-        setClickState(initialClickState);
+            const sortBooks = res.data.sort((a: Book, b: Book) => a.title.localeCompare(b.title));
+            setBooks(sortBooks);
+            const initialClickState: ClickState = {};
+            res.data.forEach((book: Book) => {
+                initialClickState[book.isbn] = book.isRead === true;
+            });
+            setClickState(initialClickState);
         });
     }, []);
 
@@ -41,8 +42,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         }
 
     useEffect(() => {
+        setFilteredBooks(books)
         if (isFocused) {
-        getBooks();
+            getBooks();
         }
         if (route.params?.showSearchBar) {
             setIsSearchVisible(route.params.showSearchBar);
@@ -132,7 +134,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
                 onChangeText={handleSearch}
             />
             <TouchableOpacity onPress={clearSearchText} style={styles.clearButton}>
-                <Text style={styles.clearButtonText}>X</Text>
+                <AntDesign name='close' size={24} color="black"/>
             </TouchableOpacity>
             </View>
         )}
