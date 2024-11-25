@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {HomeScreen} from '@/app/home';
-import { PaperProvider } from 'react-native-paper';
+import { IconButton, PaperProvider } from 'react-native-paper';
 import { RootStackParamList } from '@/components/types/types';
 import { BookInformation } from '../BookInformation';
 import AddBookScreen from './AddBook';
@@ -24,7 +24,18 @@ const App = () => {
         }}>
         <Stack.Screen
             name="Home"
-            component={HomeScreen} />
+            component={HomeScreen}
+            initialParams={{showSearchBar: false}}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <IconButton
+                  icon="magnify"
+                  size={24}
+                  onPress={() => navigation.setParams({showSearchBar: true})}
+                />
+              ),
+            })}
+          />
           <Stack.Screen 
           name="BookInformation" 
           component={BookInformation} 

@@ -34,7 +34,7 @@ export type Errors = {
 export type RootStackParamList = {
     Home: { 
         refresh?: boolean;
-        searchPress?: () => void; 
+        showSearchBar?: boolean;
     };
     BookInformation: { id: number, refresh?: boolean };
     Scan: undefined;

@@ -5,36 +5,20 @@ import { Book, ClickState, HomeNavigationProp, HomeScreenProps } from '../compon
 import {  useIsFocused  } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
-
+import { Searchbar } from 'react-native-paper';
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   const [books, setBooks] = useState([]);
   const [clickState, setClickState] = useState<ClickState>({});
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredBooks, setFilteredBooks] = useState(books);
   const axiosConfig = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
-
   const endpoint = process.env.EXPO_PUBLIC_ENDPOINT;
-  const [isSearchActive, setIsSearchActive] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const [image, setImage] = useState('');
-  const { searchPress, refresh } = route?.params || {};
-
-  const toggleSearch = () => {
-    if (searchPress) {
-      searchPress(); 
-    }
-    setIsSearchActive(true); 
-  };
-
-  const handleCancelSearch = () => {
-    setIsSearchActive(false); 
-    setSearchText(''); 
-    Keyboard.dismiss();
-  };
-
 
   const getBooks = useCallback(() => {
     axios.get(`http://${endpoint}:3030/api/books`).then((res) => {
@@ -49,7 +33,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   }, []);
 
   const isFocused = useIsFocused();
-//   console.log("Is homepage focused? " + isFocused);
 
   const handleImage = (imageLink: string) => {
     if (imageLink == null || imageLink.length == 0){
@@ -59,14 +42,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
     }
   }
 
+  console.log("Search bar visible: " + isSearchVisible)
 
 
   useEffect(() => {
     if (isFocused) {
       getBooks();
     }
-  }, [isFocused, getBooks]);
-  
+    if (route.params?.showSearchBar) {
+        setIsSearchVisible(route.params.showSearchBar);
+      }
+  }, [isFocused, getBooks, 
+    route.params?.showSearchBar
+]);
 
   const setBookAsRead = (id: number): void => {
     const currentRead = clickState[id] ? 1 : 0;
@@ -85,6 +73,29 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         console.log(e);
       });
   };
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    const lowerQuery = query.toLowerCase();
+
+    const filtered = books.filter((book: Book) => {
+        const title = book.title ? book.title.toLowerCase() : "";
+        const author = book.authorName ? book.authorName.toLowerCase() : "";
+        const genre = book.genre ? book.genre.toLowerCase() : "";
+    
+        return (
+          title.includes(lowerQuery) ||
+          author.includes(lowerQuery) ||
+          genre.includes(lowerQuery)
+        );
+      });
+
+    setFilteredBooks(filtered);
+  };
+  const clearSearchText = () => {
+    setSearchQuery('');
+    setFilteredBooks(books);
+    setIsSearchVisible(false);
+  }
 
   const renderItem = ({ item }: { item: Book }) => (
     <TouchableOpacity
@@ -117,8 +128,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
   return (
     <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="black" translucent />
+        {isSearchVisible && (
+        <View style={styles.searchBarContainer}>
+          <TextInput
+            style={styles.searchBar}
+            placeholder="Search by title, author, or genre"
+            value={searchQuery}
+            onChangeText={handleSearch}
+          />
+          <TouchableOpacity onPress={clearSearchText} style={styles.clearButton}>
+            <Text style={styles.clearButtonText}>X</Text>
+          </TouchableOpacity>
+        </View>
+      )}
         <FlatList
-          data={books}
+          data={filteredBooks}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
         />
@@ -128,6 +152,37 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+    clearButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+        backgroundColor: '#e0e0e0',
+        marginLeft: 5
+    },
+    clearButtonText: {
+        fontSize: 18,
+        color: '#000',
+    },
+    searchBarContainer: {
+        flexDirection: 'row',
+        backgroundColor: '#f5f5f5',
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        marginTop: 16,
+        alignItems: 'center', // Center vertically
+        width: '100%', // Make sure the container is full width
+    },
+    searchBar: {
+        flex: 1, // This makes the TextInput take up all available space
+        height: 40,
+        borderColor: "#ccc",
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        backgroundColor: "#fff",
+    },
     bookItem: {
         flexDirection: 'row',
         backgroundColor: "#fff",
