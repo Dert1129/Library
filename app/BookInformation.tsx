@@ -23,7 +23,6 @@ export const BookInformation = () => {
     try {
       const response = await axios.get(`http://${endpoint}:3030/api/getBook?id=${id}`);
       if (response.status === 200 && response.data) {
-        console.log(response.data)
         setBookData(response.data);
       }
     } catch (error) {

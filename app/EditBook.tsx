@@ -106,7 +106,6 @@ const EditBookScreen  = () => {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
       };
-      console.log(updatedBookData);
 
     try {
       const response = await axios.post(`http://${endpoint}:3030/api/editBook`, updatedBookData, axiosConfig);
