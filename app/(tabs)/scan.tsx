@@ -19,10 +19,11 @@ export default function ScanScreen() {
             "Content-Type": "application/json"
         }
     }
+    const endpoint = process.env.EXPO_PUBLIC_ENDPOINT;
 
     const addCopy = async (isbn: string) => {
         try {
-            const response = await axios.post("http://192.168.1.203:3030/api/addCopy?isbn=" + isbn, axiosConfig);
+            const response = await axios.post(`http://${endpoint}:3030/api/addCopy?isbn=` + isbn, axiosConfig);
             if(response.data == "Added copy"){
                 Alert.alert("Copy", "Added copy to Library");
             }
@@ -37,7 +38,7 @@ export default function ScanScreen() {
         setScannedData(data);
 
         try {
-            const response = await axios.post('http://192.168.1.203:3030/api/addBook?isbn=' + data, axiosConfig);
+            const response = await axios.post(`http://${endpoint}:3030/api/addBook?isbn=` + data, axiosConfig);
             if (response.data == "This book already exists"){
                 Alert.alert(`Book Exists`, "This book already exists in your library. Add anyway?",
                     [

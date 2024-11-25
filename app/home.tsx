@@ -15,6 +15,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
       'Content-Type': 'application/json',
     },
   };
+
+  const endpoint = process.env.EXPO_PUBLIC_ENDPOINT;
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [image, setImage] = useState('');
@@ -35,7 +37,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
 
 
   const getBooks = useCallback(() => {
-    axios.get('http://192.168.1.203:3030/api/books').then((res) => {
+    axios.get(`http://${endpoint}:3030/api/books`).then((res) => {
       const sortBooks = res.data.sort((a: Book, b: Book) => a.title.localeCompare(b.title));
       setBooks(sortBooks);
       const initialClickState: ClickState = {};
@@ -75,7 +77,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
     }));
 
     axios
-      .post('http://192.168.1.203:3030/api/markRead', { id: id, read: newRead }, axiosConfig)
+      .post(`http://${endpoint}:3030/api/markRead`, { id: id, read: newRead }, axiosConfig)
       .then((res) => {
         console.log(res.data);
       })

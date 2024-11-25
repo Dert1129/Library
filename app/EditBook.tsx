@@ -12,7 +12,7 @@ const EditBookScreen  = () => {
   const navigation = useNavigation<EditBookNavigationProp>();
   const route = useRoute<EditBookRouteProp>();
   const { item } = route.params;
-  
+  const endpoint = process.env.EXPO_PUBLIC_ENDPOINT
   const [id, setId] = useState(item.id);
   const [title, setTitle] = useState(item.title);
   const [category, setCategory] = useState(item.category);
@@ -109,7 +109,7 @@ const EditBookScreen  = () => {
       console.log(updatedBookData);
 
     try {
-      const response = await axios.post(`http://192.168.1.203:3030/api/editBook`, updatedBookData, axiosConfig);
+      const response = await axios.post(`http://${endpoint}:3030/api/editBook`, updatedBookData, axiosConfig);
       if (response.data === "Updated book") {
         Alert.alert('Success', 'Book information has been updated!');
         navigation.navigate("BookInformation", {id: item.id}); 

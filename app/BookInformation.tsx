@@ -7,6 +7,7 @@ import { useNavigation } from "expo-router";
 import { useRoute, useFocusEffect, useIsFocused } from "@react-navigation/native";
 
 export const BookInformation = () => {
+  const endpoint = process.env.EXPO_PUBLIC_ENDPOINT
   const navigation = useNavigation<BookInformationNavigationProp>();
   const route = useRoute<BookInformationRouteProp>();
   const { id } = route.params;
@@ -20,9 +21,9 @@ export const BookInformation = () => {
 
   const fetchBookData = async () => {
     try {
-      const response = await axios.get(`http://192.168.1.203:3030/api/getBook?id=${id}`);
-    //   console.log(response.data);
+      const response = await axios.get(`http://${endpoint}:3030/api/getBook?id=${id}`);
       if (response.status === 200 && response.data) {
+        console.log(response.data)
         setBookData(response.data);
       }
     } catch (error) {
@@ -33,10 +34,8 @@ export const BookInformation = () => {
 
   useEffect(() => {
     if (isFocused) {
-        // console.log("BookInformation screen is in focus")
       fetchBookData();
     } else {
-    //   console.log("BookInformation screen is unfocused");
     }
   }, [isFocused]);
 
@@ -59,7 +58,7 @@ export const BookInformation = () => {
 
   const deleteBook = async (id: number) => {
     try {
-      const response = await axios.delete("http://192.168.1.203:3030/api/deleteBook", {
+      const response = await axios.delete(`http://${endpoint}:3030/api/deleteBook`, {
         data: { id },
       });
       if (response.status === 200) {
@@ -115,10 +114,10 @@ export const BookInformation = () => {
           >
             <List.Item titleStyle={styles.accordionItem} title={`ISBN: ${bookData.isbn}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Publisher: ${bookData.publisher}`} />
-            <List.Item titleStyle={styles.accordionItem} title={`Genre: ${bookData.genre}`} />
+            <List.Item titleStyle={styles.accordionItem} title={`Genre: ${bookData.genre.replace(/[\[\]]/g, "")}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Category: ${bookData.category}`} />
-            <List.Item titleStyle={styles.accordionItem} title={`Start Date: ${bookData.startDate}`} />
-            <List.Item titleStyle={styles.accordionItem} title={`End Date: ${bookData.endDate}`} />
+            {bookData.startDate? <List.Item titleStyle={styles.accordionItem} title={`Start Date: ${bookData.startDate}`} /> : <List.Item titleStyle={styles.accordionItem} title={`Start Date: Not recorded`} />}
+            {bookData.endDate? <List.Item titleStyle={styles.accordionItem} title={`End Date: ${bookData.endDate}`} />: <List.Item titleStyle={styles.accordionItem} title={`End Date: Not recorded`} />}
             <List.Item titleStyle={styles.accordionItem} title={`Copies: ${bookData.copies}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Read? ${bookData.read === 1 ? "Yes" : "No"}`} />
           </List.Accordion>

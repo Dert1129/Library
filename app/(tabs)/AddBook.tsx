@@ -12,6 +12,7 @@ const AddBookScreen = () => {
   const [publisher, setPublisher] = useState('');
   const [genre, setGenre] = useState('');
   const [copies, setCopies] = useState('');
+  const endpoint = process.env.EXPO_PUBLIC_ENDPOINT;
 
   const [errors, setErrors] = useState<Errors>({
     title: '',
@@ -68,7 +69,7 @@ const AddBookScreen = () => {
     };
 
     try {
-      const response = await axios.post('http://192.168.1.203:3030/api/addManual', bookData);
+      const response = await axios.post(`http://${endpoint}:3030/api/addManual`, bookData);
       if (response.data === "Book could not be found") {
         Alert.alert('Error', 'Book could not be found');
       }else{
@@ -125,7 +126,7 @@ const AddBookScreen = () => {
 
                 <Text style={styles.label}>Genre</Text>
                 {errors.genre ? <Text style={styles.errorText}>{errors.genre}</Text> : null}
-                <TextInput style={styles.input} value={genre} onChangeText={setGenre} placeholder="Enter book genre" />
+                <TextInput style={styles.input} value={genre} onChangeText={setGenre} placeholder="Enter book genre(s)" />
 
                 <Text style={styles.label}>Copies</Text>
                 {errors.copies ? <Text style={styles.errorText}>{errors.copies}</Text> : null}
