@@ -108,6 +108,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         <View style={styles.bookInfo}>
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.author}>Author: {item.authorName}</Text>
+          {item.genre? <Text style={styles.author}>Genre: {item.genre.replace(/[\[\]]/g, "")}</Text> : null}
+          
         </View>
       </View>
     </TouchableOpacity>
