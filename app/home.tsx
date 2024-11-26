@@ -12,7 +12,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredBooks, setFilteredBooks] = useState(books);
-    console.log(filteredBooks);
     const axiosConfig = {
         headers: {
         'Content-Type': 'application/json',
@@ -73,19 +72,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
     const handleSearch = (query: string) => {
         setSearchQuery(query);
         const lowerQuery = query.toLowerCase();
-
+    
         const filtered = books.filter((book: Book) => {
             const title = book.title ? book.title.toLowerCase() : "";
             const author = book.authorName ? book.authorName.toLowerCase() : "";
-            // const genre = book.genre ? book.genre.toLowerCase() : "";
-        
+            const genre = book.genreList ? book.genreList.join(", ").toLowerCase() : "";
+
             return (
-            title.includes(lowerQuery) ||
-            author.includes(lowerQuery) 
-            // genre.includes(lowerQuery)
+                title.includes(lowerQuery) ||
+                author.includes(lowerQuery) ||
+                genre.includes(lowerQuery)
             );
         });
-
+    
         setFilteredBooks(filtered);
     };
     const clearSearchText = () => {

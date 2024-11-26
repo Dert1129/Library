@@ -12,7 +12,6 @@ const EditBookScreen  = () => {
   const navigation = useNavigation<EditBookNavigationProp>();
   const route = useRoute<EditBookRouteProp>();
   const { item } = route.params;
-  console.log(item)
   const endpoint = process.env.EXPO_PUBLIC_ENDPOINT
   const [id, setId] = useState(item.id);
   const [title, setTitle] = useState(item.title);
@@ -21,7 +20,6 @@ const EditBookScreen  = () => {
   const [authorName, setAuthorName] = useState(item.authorName);
   const [publisher, setPublisher] = useState(item.publisher);
   const [genre, setGenre] = useState<string[]>(Array.isArray(item.genreList) ? item.genreList : []);
-  console.log(genre);
   const [copies, setCopies] = useState(String(item.copies));
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
