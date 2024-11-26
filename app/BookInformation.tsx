@@ -70,7 +70,10 @@ export const BookInformation = () => {
 
   const handleEditPress = (book: Book | null) => {
     if (book) {
-      navigation.navigate("EditBook", { item: book });
+      navigation.navigate("EditBook", { item: {
+        ...book,
+        genreList: book.genreList || [] }
+    });
     }
   };
 
@@ -113,7 +116,7 @@ export const BookInformation = () => {
           >
             <List.Item titleStyle={styles.accordionItem} title={`ISBN: ${bookData.isbn}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Publisher: ${bookData.publisher}`} />
-            {bookData.genre? <List.Item titleStyle={styles.accordionItem} title={`Genre: ${bookData.genre.replace(/[\[\]]/g, "")}`} /> : null}
+            {bookData.genreList? <List.Item titleStyle={styles.accordionItem} title={`Genre: ${bookData.genreList.join(', ')}`} /> : null}
             <List.Item titleStyle={styles.accordionItem} title={`Category: ${bookData.category}`} />
             {bookData.startDate? <List.Item titleStyle={styles.accordionItem} title={`Start Date: ${bookData.startDate}`} /> : <List.Item titleStyle={styles.accordionItem} title={`Start Date: Not recorded`} />}
             {bookData.endDate? <List.Item titleStyle={styles.accordionItem} title={`End Date: ${bookData.endDate}`} />: <List.Item titleStyle={styles.accordionItem} title={`End Date: Not recorded`} />}

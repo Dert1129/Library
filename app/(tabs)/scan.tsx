@@ -38,7 +38,7 @@ export default function ScanScreen() {
         setScannedData(data);
 
         try {
-            const response = await axios.post(`http://${endpoint}:3030/api/addBook?isbn=` + data, axiosConfig);
+            const response = await axios.post(`http://${endpoint}:3030/api/getBook?isbn=` + data, axiosConfig);
             if (response.data == "This book already exists"){
                 Alert.alert(`Book Exists`, "This book already exists in your library. Add anyway?",
                     [
@@ -52,7 +52,7 @@ export default function ScanScreen() {
                     ]
                 )
             }
-            else if(response.data == "There was a problem adding the book"){
+            else if(response.data == null || response.data == ""){
                 Alert.alert("Error", "There was a problem adding the book. Try manually?",
                     [
                         {
@@ -60,10 +60,12 @@ export default function ScanScreen() {
                         },
                         {
                             text: "Yes",
-                            onPress: () => navigation.navigate("AddBook")
+                            onPress: () => navigation.navigate("AddBook", {item: null})
                         }
                     ]
                 )
+            }else{
+                navigation.navigate("AddBook", {item: response.data})
             }
         } catch (error) {
             alert(`${data}`)
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
-        marginTop: 10, // Add space between button and text
+        marginTop: 10,
     },
     corner: {
         position: 'absolute',

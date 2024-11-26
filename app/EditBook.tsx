@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, StatusBar, FlatList } from 'react-native';
 import axios from 'axios';
 import { EditBookNavigationProp, EditBookRouteProp, Errors } from '@/components/types/types';
 import { ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 
 const EditBookScreen  = () => {
   const navigation = useNavigation<EditBookNavigationProp>();
   const route = useRoute<EditBookRouteProp>();
   const { item } = route.params;
+  console.log(item)
   const endpoint = process.env.EXPO_PUBLIC_ENDPOINT
   const [id, setId] = useState(item.id);
   const [title, setTitle] = useState(item.title);
@@ -19,12 +20,22 @@ const EditBookScreen  = () => {
   const [isbn, setIsbn] = useState(item.isbn);
   const [authorName, setAuthorName] = useState(item.authorName);
   const [publisher, setPublisher] = useState(item.publisher);
-  const [genre, setGenre] = useState(item.genre);
+  const [genre, setGenre] = useState<string[]>(Array.isArray(item.genreList) ? item.genreList : []);
+  console.log(genre);
   const [copies, setCopies] = useState(String(item.copies));
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [endDateOpen, setEndDateOpen] = useState(false);
   const [startDateOpen, setStartDateOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [genreOptions, setGenreOptions] = useState([
+    { label: 'Mystery', value: 'Mystery' },
+    { label: 'Fantasy', value: 'Fantasy' },
+    { label: 'Science Fiction', value: 'Science Fiction' },
+    { label: 'Thriller', value: 'Thriller' },
+    { label: 'Horror', value: 'Horror' },
+    { label: 'Young Adult', value: 'Young Adult' },
+  ]);
 
 
   const axiosConfig = {
@@ -106,6 +117,7 @@ const EditBookScreen  = () => {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
       };
+      console.log(genre)
 
     try {
       const response = await axios.post(`http://${endpoint}:3030/api/editBook`, updatedBookData, axiosConfig);
@@ -119,67 +131,148 @@ const EditBookScreen  = () => {
     }
   };
 
+  const formFields = [
+    {
+        key: 'title',
+        label: 'Title',
+        value: title,
+        onChangeText: setTitle,
+        placeholder: 'Enter book title',
+        error: errors.title,
+      },
+      {
+        key: 'category',
+        label: 'Category',
+        value: category,
+        onChangeText: setCategory,
+        placeholder: 'Enter book category',
+        error: errors.category,
+      },
+      {
+        key: 'isbn',
+        label: 'ISBN',
+        value: isbn,
+        onChangeText: setIsbn,
+        placeholder: 'Enter ISBN',
+        error: errors.isbn,
+      },
+      {
+        key: 'authorName',
+        label: 'Author Name',
+        value: authorName,
+        onChangeText: setAuthorName,
+        placeholder: 'Enter author name',
+        error: errors.authorName,
+      },
+      {
+        key: 'publisher',
+        label: 'Publisher',
+        value: publisher,
+        onChangeText: setPublisher,
+        placeholder: 'Enter publisher',
+        error: errors.publisher,
+      },
+      {
+        key: 'genre',
+        label: 'Genre',
+        customComponent: (
+          <DropDownPicker
+            open={open}
+            value={genre}
+            items={genreOptions}
+            setOpen={setOpen}
+            setValue={setGenre}
+            setItems={setGenreOptions}
+            multiple={true}
+            placeholder="Select genre(s)"
+            style={styles.dropdown}
+            dropDownContainerStyle={styles.dropdownContainer}
+            mode='BADGE'
+            badgeDotColors={["#e76f51", "#00b4d8", "#e9c46a", "#e76f51", "#8ac926", "#00b4d8", "#e9c46a"]}
+          />
+        ),
+        error: errors.genre,
+      },
+      {
+        key: 'copies',
+        label: 'Copies',
+        value: copies,
+        onChangeText: setCopies,
+        placeholder: 'Enter number of copies',
+        error: errors.copies,
+      },
+      {
+        key: 'startDate',
+        label: 'Start Date',
+        value: startDate,
+        error: errors.startDate,
+        startDateComponent: (
+            <>
+                <TouchableOpacity onPress={() => setStartDateOpen(true)}>
+                <Text style={styles.dateText}>{startDate.toDateString()}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={startDateOpen}
+                  mode="date"
+                  onConfirm={handleStartDateConfirm}
+                  onCancel={() => setStartDateOpen(false)}
+                  style={styles.calendar}
+                />
+            </>
+         
+        )
+      },
+      {
+        key: 'endDate',
+        label: 'End Date',
+        value: endDate,
+        error: errors.endDate,
+        endDateComponent: (
+            <>
+                <TouchableOpacity onPress={() => setEndDateOpen(true)}>
+                <Text style={styles.dateText}>{endDate.toDateString()}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={endDateOpen}
+                  mode="date"
+                  onConfirm={handleEndDateConfirm}
+                  onCancel={() => setEndDateOpen(false)}
+                  style={styles.calendar}
+                />
+            </>
+         
+        )
+      }
+  ]
+
+
   return (
     <GestureHandlerRootView style={styles.rootContainer}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.container}>
-          <Text style={styles.label}>Title</Text>
-          {errors.title ? <Text style={styles.errorText}>{errors.title}</Text> : null}
-          <TextInput style={styles.input} value={title} onChangeText={setTitle} placeholder="Enter book title" />
-
-          <Text style={styles.label}>Category</Text>
-          {errors.category ? <Text style={styles.errorText}>{errors.category}</Text> : null}
-          <TextInput style={styles.input} value={category} onChangeText={setCategory} placeholder="Enter book category" />
-
-          <Text style={styles.label}>ISBN</Text>
-          {errors.isbn ? <Text style={styles.errorText}>{errors.isbn}</Text> : null}
-          <TextInput style={styles.input} value={isbn} onChangeText={setIsbn} placeholder="Enter ISBN" keyboardType="numeric" />
-
-          <Text style={styles.label}>Author Name</Text>
-          {errors.authorName ? <Text style={styles.errorText}>{errors.authorName}</Text> : null}
-          <TextInput style={styles.input} value={authorName} onChangeText={setAuthorName} placeholder="Enter author name" />
-
-          <Text style={styles.label}>Start Date</Text>
-          {errors.startDate ? <Text style={styles.errorText}>{errors.startDate}</Text> : null}
-          <TouchableOpacity onPress={() => setStartDateOpen(true)}>
-            <Text style={styles.dateText}>{startDate.toDateString()}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={startDateOpen}
-            mode="date"
-            onConfirm={handleStartDateConfirm}
-            onCancel={() => setStartDateOpen(false)}
-            style={styles.calendar}
-          />
-
-          <Text style={styles.label}>End Date</Text>
-          {errors.endDate ? <Text style={styles.errorText}>{errors.endDate}</Text> : null}
-          <TouchableOpacity onPress={() => setEndDateOpen(true)}>
-            <Text style={styles.dateText}>{endDate.toDateString()}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={endDateOpen}
-            mode="date"
-            onConfirm={handleEndDateConfirm}
-            onCancel={() => setEndDateOpen(false)}
-            style={styles.calendar}
-          />
-
-          <Text style={styles.label}>Publisher</Text>
-          {errors.publisher ? <Text style={styles.errorText}>{errors.publisher}</Text> : null}
-          <TextInput style={styles.input} value={publisher} onChangeText={setPublisher} placeholder="Enter publisher" />
-
-          <Text style={styles.label}>Genre</Text>
-          {errors.genre ? <Text style={styles.errorText}>{errors.genre}</Text> : null}
-          <TextInput style={styles.input} value={genre} onChangeText={setGenre} placeholder="Enter book genre" />
-
-          <Text style={styles.label}>Copies</Text>
-          {errors.copies ? <Text style={styles.errorText}>{errors.copies}</Text> : null}
-          <TextInput style={styles.input} value={copies} onChangeText={setCopies} placeholder="Enter number of copies" keyboardType="numeric" />
-
-          <Button title="Update Book" onPress={handleUpdate} />
-        </View>
-      </ScrollView>
+      <StatusBar barStyle="light-content" backgroundColor="black" translucent />
+      <FlatList
+        data={formFields}
+        keyExtractor={(item) => item.key}
+        renderItem={({ item }) => (
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>{item.label}</Text>
+            {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
+            {item.customComponent || item.startDateComponent || item.endDateComponent || (
+              <TextInput
+                style={styles.input}
+                value={item.value}
+                onChangeText={item.onChangeText}
+                placeholder={item.placeholder}
+              />
+            )}
+          </View>
+        )}
+        ListFooterComponent={
+          <View style={styles.footer}>
+            <Button title="Update Book" onPress={handleUpdate} />
+          </View>
+        }
+        contentContainerStyle={styles.contentContainer}
+      />
     </GestureHandlerRootView>
   );
 };
@@ -202,6 +295,7 @@ const styles = StyleSheet.create({
       },
   rootContainer: {
     flex: 1,
+    backgroundColor: '#fff'
   },
   scrollContainer: {
     flexGrow: 1,
@@ -229,5 +323,23 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 14,
     marginBottom: 5,
+  },
+  dropdown: {
+    marginTop: 5,
+    borderColor: 'gray',
+    borderRadius: 5,
+  },
+  dropdownContainer: {
+    borderColor: 'gray',
+  },
+  fieldContainer: {
+    marginBottom: 15,
+  },
+  contentContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  footer: {
+    marginTop: 20,
   },
 });

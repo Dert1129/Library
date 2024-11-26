@@ -12,6 +12,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredBooks, setFilteredBooks] = useState(books);
+    console.log(filteredBooks);
     const axiosConfig = {
         headers: {
         'Content-Type': 'application/json',
@@ -76,12 +77,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         const filtered = books.filter((book: Book) => {
             const title = book.title ? book.title.toLowerCase() : "";
             const author = book.authorName ? book.authorName.toLowerCase() : "";
-            const genre = book.genre ? book.genre.toLowerCase() : "";
+            // const genre = book.genre ? book.genre.toLowerCase() : "";
         
             return (
             title.includes(lowerQuery) ||
-            author.includes(lowerQuery) ||
-            genre.includes(lowerQuery)
+            author.includes(lowerQuery) 
+            // genre.includes(lowerQuery)
             );
         });
 
@@ -115,7 +116,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
             <View style={styles.bookInfo}>
             <Text style={styles.bookTitle}>{item.title}</Text>
             <Text style={styles.bookDetails}>Author: {item.authorName}</Text>
-            {item.genre? <Text style={styles.bookDetails}>Genre: {item.genre.replace(/[\[\]]/g, "")}</Text> : null}
+            {item.genreList? <Text style={styles.bookDetails}>Genre: {item.genreList.join(", ")}</Text> : null}
             </View>
         </View>
         </TouchableOpacity>

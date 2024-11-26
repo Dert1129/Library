@@ -11,7 +11,7 @@ export type Book = {
     title: string;
     isbn: string;
     authorName: string;
-    genre: string;
+    genreList: string[];
     imageLink: string;
     isRead: boolean;
     description: string;
@@ -38,7 +38,7 @@ export type RootStackParamList = {
     };
     BookInformation: { id: number, refresh?: boolean };
     Scan: undefined;
-    AddBook: undefined;
+    AddBook: {item: Book | null};
     EditBook: {item: Book};
 };
 
@@ -50,7 +50,7 @@ export type BookInformationRouteProp = RouteProp<RootStackParamList, 'BookInform
     authorName: string;
     isbn: string;
     description: string;
-    genre: string;
+    genreList: string[];
     imageLink: string;
     category: string;
     publisher: string;
@@ -90,7 +90,7 @@ export interface EditBookProps {
     authorName: string;
     isbn: string;
     description: string;
-    genre: string;
+    genreList: string[];
     imageLink: string;
     category: string;
     publisher: string;
