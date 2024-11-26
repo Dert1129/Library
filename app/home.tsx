@@ -42,16 +42,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         }
 
     useEffect(() => {
-        setFilteredBooks(books)
         if (isFocused) {
             getBooks();
         }
+    
         if (route.params?.showSearchBar) {
             setIsSearchVisible(route.params.showSearchBar);
         }
-    }, [isFocused, getBooks, 
-        route.params?.showSearchBar
-    ]);
+        setFilteredBooks(books);
+    }, [isFocused, getBooks, books, route.params?.showSearchBar]);
 
     const setBookAsRead = (id: number): void => {
         const currentRead = clickState[id] ? 1 : 0;

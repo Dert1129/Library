@@ -6,7 +6,12 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "typeRoots": [
+        "./node_modules/@types",
+        "./node_modules/react-native/types"
+      ],
+      "types": ["react", "react-native", "node"]
   },
   "include": [
     "**/*.ts",
