@@ -94,7 +94,9 @@ export const BookInformation = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView 
+    contentContainerStyle={styles.container}
+    keyboardShouldPersistTaps="handled">
       <View style={styles.bookContainer}>
         <View style={styles.innerContainer}>
           <View style={styles.imageContainer}>

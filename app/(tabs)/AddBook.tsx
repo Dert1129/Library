@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, StatusBar, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert, StatusBar, FlatList, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -7,17 +7,28 @@ import { useRoute } from '@react-navigation/native';
 import { AddBookRouteProp } from '@/components/types/types';
 
 const AddBookScreen = () => {
-    const route = useRoute<AddBookRouteProp>();
-    const {item} = route.params;
-  const [title, setTitle] = useState(item?.title || "");
-  const [category, setCategory] = useState(item?.category || "");
-  const [isbn, setIsbn] = useState(item?.isbn || "");
-  const [authorName, setAuthorName] = useState(item?.authorName || "");
-  const [publisher, setPublisher] = useState(item?.publisher || "");
-  const [genre, setGenre] = useState<string[]>(item?.genre ? [item.genre] : []);
-  const [copies, setCopies] = useState(item?.copies ? item.copies.toString() : "");
-  const [imageLink, setImageLink] = useState(item?.imageLink || "");
-  const [description, setDescrption] = useState(item?.description || "");
+  const route = useRoute<AddBookRouteProp>();
+  const defaultItem = {
+    title: '',
+    category: '',
+    isbn: '',
+    authorName: '',
+    publisher: '',
+    genreList: [],
+    copies: 0,
+    imageLink: '',
+    description: '',
+  }
+  const item = route.params?.item || defaultItem;
+  const [title, setTitle] = useState(item.title || "");
+  const [category, setCategory] = useState(item.category || "");
+  const [isbn, setIsbn] = useState(item.isbn || "");
+  const [authorName, setAuthorName] = useState(item.authorName || "");
+  const [publisher, setPublisher] = useState(item.publisher || "");
+  const [genre, setGenre] = useState<string[]>(item.genreList || []);
+  const [copies, setCopies] = useState(item.copies ? item.copies.toString() : "");
+  const [imageLink, setImageLink] = useState(item.imageLink || "");
+  const [description, setDescrption] = useState(item.description || "");
   const endpoint = process.env.EXPO_PUBLIC_ENDPOINT;
 
   const [open, setOpen] = useState(false);
@@ -39,6 +50,30 @@ const AddBookScreen = () => {
     genre: '',
     copies: '',
   });
+
+  const clearFields = () => {
+    setTitle('');
+    setCategory('');
+    setIsbn('');
+    setAuthorName('');
+    setPublisher('');
+    setGenre([]);
+    setCopies('');
+    setImageLink('');
+    setDescrption('');
+  };
+
+  useEffect(() => {
+      setTitle(item.title || '');
+      setCategory(item.category || '');
+      setIsbn(item.isbn || '');
+      setAuthorName(item.authorName || '');
+      setPublisher(item.publisher || '');
+      setGenre(item.genreList || []);
+      setCopies(item.copies ? item.copies.toString() : '');
+      setImageLink(item.imageLink || '');
+      setDescrption(item.description || '');
+    }, [item]);
 
   const validateFields = () => {
     const newErrors = {
@@ -82,7 +117,6 @@ const AddBookScreen = () => {
 
     try {
       const response = await axios.post(`http://${endpoint}:3030/api/addManual`, bookData);
-      console.log(bookData);
       if (response.data === 'Book could not be found') {
         Alert.alert('Error', 'Book could not be found');
       } else {
@@ -189,6 +223,7 @@ const AddBookScreen = () => {
       <FlatList
         data={formFields}
         keyExtractor={(item) => item.key}
+        keyboardShouldPersistTaps="handled"
         renderItem={({ item }) => (
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>{item.label}</Text>
@@ -199,14 +234,20 @@ const AddBookScreen = () => {
                 value={item.value}
                 onChangeText={item.onChangeText}
                 placeholder={item.placeholder}
+                
               />
             )}
           </View>
         )}
         ListFooterComponent={
-          <View>
-            <Button title="Save Book" onPress={handleSubmit} />
-          </View>
+          <View style={styles.footer}>
+          <TouchableOpacity style={styles.clearButton} onPress={clearFields}>
+            <Text style={styles.clearButtonText}>Clear Fields</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+            <Text style={styles.clearButtonText}>Save Book</Text>
+          </TouchableOpacity>
+        </View>
         }
         contentContainerStyle={styles.contentContainer}
       />
@@ -219,7 +260,7 @@ export default AddBookScreen;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: '#fff', // Ensure background is white
+    backgroundColor: '#fff',
   },
   contentContainer: {
     paddingHorizontal: 20,
@@ -252,5 +293,34 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     borderColor: 'gray',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  clearButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    width: "45%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  clearButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  saveButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    width: "45%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  saveButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

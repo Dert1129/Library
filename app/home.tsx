@@ -138,6 +138,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
             </View>
         )}
             <FlatList
+            keyboardShouldPersistTaps="handled"
             data={filteredBooks}
             renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}

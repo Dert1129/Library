@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, StatusBar, FlatList } from 'react-native';
 import axios from 'axios';
 import { EditBookNavigationProp, EditBookRouteProp, Errors } from '@/components/types/types';
-import { ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -115,7 +115,6 @@ const EditBookScreen  = () => {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
       };
-      console.log(genre)
 
     try {
       const response = await axios.post(`http://${endpoint}:3030/api/editBook`, updatedBookData, axiosConfig);
@@ -250,6 +249,7 @@ const EditBookScreen  = () => {
       <FlatList
         data={formFields}
         keyExtractor={(item) => item.key}
+        keyboardShouldPersistTaps="handled"
         renderItem={({ item }) => (
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>{item.label}</Text>

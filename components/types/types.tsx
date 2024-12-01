@@ -81,6 +81,9 @@ export interface ScanScreenProps {
 export interface AddBookProps {
     navigation: AddBookNavigationProp;
     route: AddBookRouteProp;
+    params: {
+        item?: Book;
+    }
 }
 
 export type EditBookNavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditBook'>;
