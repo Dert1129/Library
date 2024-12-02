@@ -63,18 +63,6 @@ const AddBookScreen = () => {
     setDescrption('');
   };
 
-  useEffect(() => {
-      setTitle(item.title || '');
-      setCategory(item.category || '');
-      setIsbn(item.isbn || '');
-      setAuthorName(item.authorName || '');
-      setPublisher(item.publisher || '');
-      setGenre(item.genreList || []);
-      setCopies(item.copies ? item.copies.toString() : '');
-      setImageLink(item.imageLink || '');
-      setDescrption(item.description || '');
-    }, [item]);
-
   const validateFields = () => {
     const newErrors = {
       title: '',
@@ -223,6 +211,7 @@ const AddBookScreen = () => {
       <FlatList
         data={formFields}
         keyExtractor={(item) => item.key}
+        removeClippedSubviews={false}
         keyboardShouldPersistTaps="handled"
         renderItem={({ item }) => (
           <View style={styles.fieldContainer}>
