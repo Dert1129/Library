@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Layout() {
   return (
@@ -50,6 +49,18 @@ export default function Layout() {
           headerShown: false
         }}
       />
+
+      <Tabs.Screen 
+        name="BookCarousel"
+        options={{
+          tabBarLabel: "Shuffle",
+          tabBarIcon: ({color, focused}) => (
+            <TabBarIcon name={focused ? "menu" : 'menu-outline'} color={color} />
+          ),
+          headerShown: false
+          
+        }}
+        />
      
     </Tabs>
   );
