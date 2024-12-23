@@ -116,6 +116,8 @@ const AddBookScreen = () => {
         setPublisher('');
         setGenre([]);
         setCopies('');
+        setImageLink('');
+        setDescrption('');
         setErrors({
           title: '',
           category: '',
