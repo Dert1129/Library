@@ -42,7 +42,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({route, navigation}) => {
         }
 
     useEffect(() => {
-        if (isFocused) {
+        if (!isSearchVisible) {
             getBooks();
         }
     
