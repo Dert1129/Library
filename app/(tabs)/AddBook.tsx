@@ -21,7 +21,7 @@ const AddBookScreen = () => {
   }
   const item = route.params?.item || defaultItem;
   const [title, setTitle] = useState(item.title || "");
-  const [category, setCategory] = useState(item.category || "");
+  const [category, setCategory] = useState<string[]>(item.genreList || []);
   const [isbn, setIsbn] = useState(item.isbn || "");
   const [authorName, setAuthorName] = useState(item.authorName || "");
   const [publisher, setPublisher] = useState(item.publisher || "");
@@ -32,6 +32,11 @@ const AddBookScreen = () => {
   const endpoint = process.env.EXPO_PUBLIC_ENDPOINT;
 
   const [open, setOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState(false);
+  const [categoryOptions, setCategoryOptions] = useState([
+    {label: 'Fiction', value: 'Fiction'},
+    {label: 'Non-Fiction', value: "Non-Fiction"}
+  ])
   const [genreOptions, setGenreOptions] = useState([
     { label: 'Mystery', value: 'Mystery' },
     { label: 'Fantasy', value: 'Fantasy' },
@@ -53,7 +58,7 @@ const AddBookScreen = () => {
 
   const clearFields = () => {
     setTitle('');
-    setCategory('');
+    setCategory([]);
     setIsbn('');
     setAuthorName('');
     setPublisher('');
@@ -75,7 +80,7 @@ const AddBookScreen = () => {
     };
 
     if (!title) newErrors.title = 'Title is required';
-    if (!category) newErrors.category = 'Category is required';
+    if (!category.length) newErrors.category = 'Category is required';
     if (!isbn) newErrors.isbn = 'ISBN is required';
     if (!authorName) newErrors.authorName = 'Author name is required';
     if (!publisher) newErrors.publisher = 'Publisher is required';
@@ -110,7 +115,7 @@ const AddBookScreen = () => {
       } else {
         Alert.alert('Success', 'Book information has been saved!');
         setTitle('');
-        setCategory('');
+        setCategory([]);
         setIsbn('');
         setAuthorName('');
         setPublisher('');
@@ -146,9 +151,23 @@ const AddBookScreen = () => {
     {
       key: 'category',
       label: 'Category',
-      value: category,
-      onChangeText: setCategory,
-      placeholder: 'Enter book category',
+      customComponent: (
+        <DropDownPicker
+          open={openCategory}
+          value={category}
+          items={categoryOptions}
+          setOpen={setOpenCategory}
+          setValue={setCategory}
+          setItems={setCategoryOptions}
+          multiple={true}
+          placeholder="Select category"
+          style={styles.dropdown}
+          dropDownContainerStyle={styles.dropdownContainer}
+          mode='BADGE'
+          badgeDotColors={["#e76f51", "#00b4d8"]}
+          dropDownDirection="TOP"
+        />
+      ),
       error: errors.category,
     },
     {
