@@ -50,7 +50,7 @@ export default function Layout() {
         }}
       />
 
-      <Tabs.Screen 
+      {/* <Tabs.Screen 
         name="BookCarousel"
         options={{
           tabBarLabel: "Shuffle",
@@ -60,7 +60,7 @@ export default function Layout() {
           headerShown: false
           
         }}
-        />
+        /> */}
      
     </Tabs>
   );
