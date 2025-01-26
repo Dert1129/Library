@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, StatusBar, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, StatusBar, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import axios from 'axios';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -226,31 +226,118 @@ const AddBookScreen = () => {
     },
   ];
 
+  // return (
+  //   <GestureHandlerRootView style={styles.rootContainer}>
+  //     <StatusBar barStyle="light-content" backgroundColor="black" translucent />
+  //     <FlatList
+  //       data={formFields}
+  //       keyExtractor={(item) => item.key}
+  //       removeClippedSubviews={false}
+  //       keyboardShouldPersistTaps="handled"
+  //       renderItem={({ item }) => (
+  //         <View style={styles.fieldContainer}>
+  //           <Text style={styles.label}>{item.label}</Text>
+  //           {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
+  //           {item.customComponent || (
+  //             <TextInput
+  //               style={styles.input}
+  //               value={item.value}
+  //               onChangeText={item.onChangeText}
+  //               placeholder={item.placeholder}
+                
+  //             />
+  //           )}
+  //         </View>
+  //       )}
+  //       ListFooterComponent={
+  //         <View style={styles.footer}>
+  //         <TouchableOpacity style={styles.clearButton} onPress={clearFields}>
+  //           <Text style={styles.clearButtonText}>Clear Fields</Text>
+  //         </TouchableOpacity>
+  //         <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+  //           <Text style={styles.clearButtonText}>Save Book</Text>
+  //         </TouchableOpacity>
+  //       </View>
+  //       }
+  //       contentContainerStyle={styles.contentContainer}
+  //     />
+  //   </GestureHandlerRootView>
+  // );
   return (
     <GestureHandlerRootView style={styles.rootContainer}>
       <StatusBar barStyle="light-content" backgroundColor="black" translucent />
-      <FlatList
-        data={formFields}
-        keyExtractor={(item) => item.key}
-        removeClippedSubviews={false}
-        keyboardShouldPersistTaps="handled"
-        renderItem={({ item }) => (
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>{item.label}</Text>
-            {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
-            {item.customComponent || (
-              <TextInput
-                style={styles.input}
-                value={item.value}
-                onChangeText={item.onChangeText}
-                placeholder={item.placeholder}
-                
-              />
-            )}
-          </View>
-        )}
-        ListFooterComponent={
-          <View style={styles.footer}>
+      {/* <ScrollView contentContainerStyle={styles.contentContainer}> */}
+      <View style={styles.contentContainer}>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Title</Text>
+          {errors.title ? <Text style={styles.errorText}>{errors.title}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Enter book title"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Category</Text>
+          {errors.category ? <Text style={styles.errorText}>{errors.category}</Text> : null}
+          <DropDownPicker
+            open={openCategory}
+            value={category}
+            items={categoryOptions}
+            setOpen={setOpenCategory}
+            setValue={setCategory}
+            setItems={setCategoryOptions}
+            multiple={true}
+            placeholder="Select category"
+            style={styles.dropdown}
+            dropDownContainerStyle={styles.dropdownContainer}
+            mode='BADGE'
+            badgeDotColors={["#e76f51", "#00b4d8"]}
+            dropDownDirection="TOP"
+          />  
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>ISBN</Text>
+          {errors.isbn ? <Text style={styles.errorText}>{errors.isbn}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={isbn}
+            onChangeText={setIsbn}
+            placeholder="Enter ISBN"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Author Name</Text>
+          {errors.authorName ? <Text style={styles.errorText}>{errors.authorName}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={authorName}
+            onChangeText={setAuthorName}
+            placeholder="Enter author name"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Publisher</Text>
+          {errors.publisher ? <Text style={styles.errorText}>{errors.publisher}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={publisher}
+            onChangeText={setPublisher}
+            placeholder="Enter publisher"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Copies</Text>
+          {errors.copies ? <Text style={styles.errorText}>{errors.copies}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={copies}
+            onChangeText={setCopies}
+            placeholder="Enter number of copies"
+          />
+        </View>
+        <View style={styles.footer}>
           <TouchableOpacity style={styles.clearButton} onPress={clearFields}>
             <Text style={styles.clearButtonText}>Clear Fields</Text>
           </TouchableOpacity>
@@ -258,11 +345,10 @@ const AddBookScreen = () => {
             <Text style={styles.clearButtonText}>Save Book</Text>
           </TouchableOpacity>
         </View>
-        }
-        contentContainerStyle={styles.contentContainer}
-      />
+      {/* </ScrollView> */}
+      </View>
     </GestureHandlerRootView>
-  );
+  )
 };
 
 export default AddBookScreen;

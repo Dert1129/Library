@@ -92,6 +92,7 @@ export const BookInformation = () => {
         return <Image source={{uri: imageLink}} style={styles.bookImage} />
     }
   }
+  const msDay = 24 * 60 * 60 * 1000;
 
   return (
     <ScrollView 
@@ -116,14 +117,17 @@ export const BookInformation = () => {
             style={styles.accordionHeader}
             titleStyle={styles.accordionTitle}
           >
+            {bookData.rating ? <List.Item titleStyle={styles.accordionItem} title={`Rating: ${bookData.rating}`} /> : <List.Item titleStyle={styles.accordionItem} title={`Rating: Not rated`} />}
             <List.Item titleStyle={styles.accordionItem} title={`ISBN: ${bookData.isbn}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Publisher: ${bookData.publisher}`} />
             {bookData.genreList? <List.Item titleStyle={styles.accordionItem} title={`Genre: ${bookData.genreList.join(', ')}`} /> : null}
             <List.Item titleStyle={styles.accordionItem} title={`Category: ${bookData.category}`} />
-            {bookData.startDate? <List.Item titleStyle={styles.accordionItem} title={`Start Date: ${bookData.startDate}`} /> : <List.Item titleStyle={styles.accordionItem} title={`Start Date: Not recorded`} />}
-            {bookData.endDate? <List.Item titleStyle={styles.accordionItem} title={`End Date: ${bookData.endDate}`} />: <List.Item titleStyle={styles.accordionItem} title={`End Date: Not recorded`} />}
+            {/* {bookData.startDate? <List.Item titleStyle={styles.accordionItem} title={`Start Date: ${bookData.startDate}`} /> : <List.Item titleStyle={styles.accordionItem} title={`Start Date: Not recorded`} />}
+            {bookData.endDate? <List.Item titleStyle={styles.accordionItem} title={`End Date: ${bookData.endDate}`} />: <List.Item titleStyle={styles.accordionItem} title={`End Date: Not recorded`} />} */}
+            {bookData.endDate && bookData.startDate ? <List.Item titleStyle={styles.accordionItem} title={`Duration: ${Math.floor((bookData.endDate.getTime() - bookData.startDate.getTime()) / msDay)}`} /> : null}
             <List.Item titleStyle={styles.accordionItem} title={`Copies: ${bookData.copies}`} />
             <List.Item titleStyle={styles.accordionItem} title={`Read? ${bookData.read === 1 ? "Yes" : "No"}`} />
+            {bookData.review ? <List.Item titleStyle={styles.accordionItem} title={`Review: ${bookData.review}`} /> : <List.Item titleStyle={styles.accordionItem} title={`Review: Not reviewed`} /> }
           </List.Accordion>
           <List.Accordion
             title="Description"

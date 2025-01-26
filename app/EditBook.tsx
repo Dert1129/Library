@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, StatusBar, FlatList } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, TouchableOpacity, StatusBar, TextInput, ScrollView } from 'react-native';
 import axios from 'axios';
 import { EditBookNavigationProp, EditBookRouteProp, Errors } from '@/components/types/types';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -26,6 +26,8 @@ const EditBookScreen  = () => {
   const [endDateOpen, setEndDateOpen] = useState(false);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [review, setReview] = useState(item.review);
+  const [rating, setRating] = useState(String(item.rating));
   const [genreOptions, setGenreOptions] = useState([
     { label: 'Mystery', value: 'Mystery' },
     { label: 'Fantasy', value: 'Fantasy' },
@@ -52,6 +54,7 @@ const EditBookScreen  = () => {
     copies: '',
     startDate: '',
     endDate: '',
+    rating: '',
   });
 
   const validateFields = () => {
@@ -65,6 +68,7 @@ const EditBookScreen  = () => {
       copies: '',
       startDate: '',
       endDate: '',
+      rating: '',
     };
 
     if (!title) newErrors.title = 'Title is required';
@@ -80,7 +84,9 @@ const EditBookScreen  = () => {
         newErrors.startDate = "Start date must be less than or equal to the end date"
         newErrors.endDate = "End date must be greater than or equal to the start date"
     }
-
+    if(!rating || isNaN(Number(rating)) || Number(rating) < 0 || Number(rating) > 10) {
+        newErrors.rating = "Rating must be a number between 0 and 10"
+    }
   
     
     setErrors(newErrors);
@@ -114,6 +120,8 @@ const EditBookScreen  = () => {
         copies: Number(copies),
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
+        review,
+        rating: Number(rating),
       };
 
     try {
@@ -128,51 +136,63 @@ const EditBookScreen  = () => {
     }
   };
 
-  const formFields = [
-    {
-        key: 'title',
-        label: 'Title',
-        value: title,
-        onChangeText: setTitle,
-        placeholder: 'Enter book title',
-        error: errors.title,
-      },
-      {
-        key: 'category',
-        label: 'Category',
-        value: category,
-        onChangeText: setCategory,
-        placeholder: 'Enter book category',
-        error: errors.category,
-      },
-      {
-        key: 'isbn',
-        label: 'ISBN',
-        value: isbn,
-        onChangeText: setIsbn,
-        placeholder: 'Enter ISBN',
-        error: errors.isbn,
-      },
-      {
-        key: 'authorName',
-        label: 'Author Name',
-        value: authorName,
-        onChangeText: setAuthorName,
-        placeholder: 'Enter author name',
-        error: errors.authorName,
-      },
-      {
-        key: 'publisher',
-        label: 'Publisher',
-        value: publisher,
-        onChangeText: setPublisher,
-        placeholder: 'Enter publisher',
-        error: errors.publisher,
-      },
-      {
-        key: 'genre',
-        label: 'Genre',
-        customComponent: (
+  return (
+    <GestureHandlerRootView style={styles.rootContainer}>
+      <StatusBar barStyle="light-content" backgroundColor="black" translucent />
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Title</Text>
+          {errors.title ? <Text style={styles.errorText}>{errors.title}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Enter book title"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Category</Text>
+          {errors.category ? <Text style={styles.errorText}>{errors.category}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={category}
+            onChangeText={setCategory}
+            placeholder="Enter book category"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>ISBN</Text>
+          {errors.isbn ? <Text style={styles.errorText}>{errors.isbn}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={isbn}
+            onChangeText={setIsbn}
+            placeholder="Enter ISBN"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Author Name</Text>
+          {errors.authorName ? <Text style={styles.errorText}>{errors.authorName}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={authorName}
+            onChangeText={setAuthorName}
+            placeholder="Enter author name"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Publisher</Text>
+          {errors.publisher ? <Text style={styles.errorText}>{errors.publisher}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={publisher}
+            onChangeText={setPublisher}
+            placeholder="Enter publisher"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Genre</Text>
+          {errors.genre ? <Text style={styles.errorText}>{errors.genre}</Text> : null}
           <DropDownPicker
             open={open}
             value={genre}
@@ -184,93 +204,71 @@ const EditBookScreen  = () => {
             placeholder="Select genre(s)"
             style={styles.dropdown}
             dropDownContainerStyle={styles.dropdownContainer}
-            mode='BADGE'
-            badgeDotColors={["#e76f51", "#00b4d8", "#e9c46a", "#e76f51", "#8ac926", "#00b4d8", "#e9c46a"]}
+            mode="BADGE"
+            badgeDotColors={['#e76f51', '#00b4d8', '#e9c46a', '#e76f51', '#8ac926', '#00b4d8', '#e9c46a']}
           />
-        ),
-        error: errors.genre,
-      },
-      {
-        key: 'copies',
-        label: 'Copies',
-        value: copies,
-        onChangeText: setCopies,
-        placeholder: 'Enter number of copies',
-        error: errors.copies,
-      },
-      {
-        key: 'startDate',
-        label: 'Start Date',
-        value: startDate,
-        error: errors.startDate,
-        startDateComponent: (
-            <>
-                <TouchableOpacity onPress={() => setStartDateOpen(true)}>
-                <Text style={styles.dateText}>{startDate.toDateString()}</Text>
-                </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={startDateOpen}
-                  mode="date"
-                  onConfirm={handleStartDateConfirm}
-                  onCancel={() => setStartDateOpen(false)}
-                  style={styles.calendar}
-                />
-            </>
-         
-        )
-      },
-      {
-        key: 'endDate',
-        label: 'End Date',
-        value: endDate,
-        error: errors.endDate,
-        endDateComponent: (
-            <>
-                <TouchableOpacity onPress={() => setEndDateOpen(true)}>
-                <Text style={styles.dateText}>{endDate.toDateString()}</Text>
-                </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={endDateOpen}
-                  mode="date"
-                  onConfirm={handleEndDateConfirm}
-                  onCancel={() => setEndDateOpen(false)}
-                  style={styles.calendar}
-                />
-            </>
-         
-        )
-      }
-  ]
-
-
-  return (
-    <GestureHandlerRootView style={styles.rootContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="black" translucent />
-      <FlatList
-        data={formFields}
-        keyExtractor={(item) => item.key}
-        keyboardShouldPersistTaps="handled"
-        renderItem={({ item }) => (
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>{item.label}</Text>
-            {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
-            {item.customComponent || item.startDateComponent || item.endDateComponent || (
-              <TextInput
-                style={styles.input}
-                value={item.value}
-                onChangeText={item.onChangeText}
-                placeholder={item.placeholder}
-              />
-            )}
-          </View>
-        )}
-        ListFooterComponent={
-          <View style={styles.footer}>
-            <Button title="Update Book" onPress={handleUpdate} />
-          </View>
-        }
-        contentContainerStyle={styles.contentContainer}
-      />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Copies</Text>
+          {errors.copies ? <Text style={styles.errorText}>{errors.copies}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={copies}
+            onChangeText={setCopies}
+            placeholder="Enter number of copies"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Start Date</Text>
+          {errors.startDate ? <Text style={styles.errorText}>{errors.startDate}</Text> : null}
+          <TouchableOpacity onPress={() => setStartDateOpen(true)}>
+            <Text style={styles.dateText}>{startDate.toDateString()}</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={startDateOpen}
+            mode="date"
+            onConfirm={handleStartDateConfirm}
+            onCancel={() => setStartDateOpen(false)}
+            style={styles.calendar}
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>End Date</Text>
+          {errors.endDate ? <Text style={styles.errorText}>{errors.endDate}</Text> : null}
+          <TouchableOpacity onPress={() => setEndDateOpen(true)}>
+            <Text style={styles.dateText}>{endDate.toDateString()}</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={endDateOpen}
+            mode="date"
+            onConfirm={handleEndDateConfirm}
+            onCancel={() => setEndDateOpen(false)}
+            style={styles.calendar}
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Rating (1-10)</Text>
+          {errors.rating ? <Text style={styles.errorText}>{errors.rating}</Text> : null}
+          <TextInput
+            style={styles.input}
+            value={rating}
+            onChangeText={setRating}
+            placeholder="Enter rating (1-10)"
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Review</Text>
+          <TextInput
+            style={styles.input}
+            value={review}
+            onChangeText={setReview}
+            placeholder=""
+          />
+        </View>
+        <View style={styles.footer}>
+          <Button title="Update Book" onPress={handleUpdate} />
+        </View>
+      </ScrollView>
     </GestureHandlerRootView>
   );
 };

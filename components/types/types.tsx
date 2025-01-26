@@ -17,6 +17,8 @@ export type Book = {
     description: string;
     startDate: Date;
     endDate: Date;
+    review: string;
+    rating: number;
 };
 
 export type Errors = {
@@ -29,6 +31,7 @@ export type Errors = {
     copies: string;
     startDate: string;
     endDate: string;
+    rating: string;
   };
 
 export type RootStackParamList = {
