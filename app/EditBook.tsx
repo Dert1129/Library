@@ -26,8 +26,8 @@ const EditBookScreen  = () => {
   const [endDateOpen, setEndDateOpen] = useState(false);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const [review, setReview] = useState(item.review);
-  const [rating, setRating] = useState(String(item.rating));
+  const [review, setReview] = useState(item.review ?? '');
+  const [rating, setRating] = useState(String(item.rating ?? ''));
   const [genreOptions, setGenreOptions] = useState([
     { label: 'Mystery', value: 'Mystery' },
     { label: 'Fantasy', value: 'Fantasy' },
@@ -115,7 +115,7 @@ const EditBookScreen  = () => {
         category,
         isbn,
         authorName,
-        genre,
+        genre: genre.join(', '),
         publisher,
         copies: Number(copies),
         startDate: formatDate(startDate),
@@ -123,6 +123,8 @@ const EditBookScreen  = () => {
         review,
         rating: Number(rating),
       };
+
+      console.log(updatedBookData);
 
     try {
       const response = await axios.post(`http://${endpoint}:3030/api/editBook`, updatedBookData, axiosConfig);
@@ -253,7 +255,7 @@ const EditBookScreen  = () => {
             style={styles.input}
             value={rating}
             onChangeText={setRating}
-            placeholder="Enter rating (1-10)"
+            placeholder="Enter rating (0-10)"
           />
         </View>
         <View style={styles.fieldContainer}>
@@ -262,7 +264,7 @@ const EditBookScreen  = () => {
             style={styles.input}
             value={review}
             onChangeText={setReview}
-            placeholder=""
+            placeholder=" "
           />
         </View>
         <View style={styles.footer}>
