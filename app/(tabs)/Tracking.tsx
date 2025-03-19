@@ -52,13 +52,8 @@ export const TrackingScreen: React.FC<HomeScreenProps> = ({ route, navigation })
     // route.params?.showSearchBar
   ]);
 
-  const setBookAsRead = (id: number): void => {
-    const currentRead = clickState[id] ? 1 : 0;
-    const newRead = currentRead === 1 ? 0 : 1;
-    setClickState((prevState: any) => ({
-      ...prevState,
-      [id]: newRead === 1,
-    }));
+  const setBookAsRead = (id: number, readState: number): void => {
+    const newRead = readState ? 0 : 1;
     console.log(newRead);
     axios
       .post(`http://${endpoint}:3030/api/markRead`, { id: id, read: newRead }, axiosConfig)
@@ -95,15 +90,15 @@ export const TrackingScreen: React.FC<HomeScreenProps> = ({ route, navigation })
   const renderItem = ({ item }: { item: Book }) => (
     <TouchableOpacity onPress={() => navigation.navigate('BookInformation', { id: item.id })}>
       <View style={styles.bookItem}>
-        {!clickState[item.id] ? (
+        {!item.read ? (
           <View style={styles.bookmark}>
-            <TouchableOpacity key={item.id} onPress={() => setBookAsRead(item.id)}>
+            <TouchableOpacity key={item.id} onPress={() => setBookAsRead(item.id, item.read)}>
               <Ionicons name={'bookmark-outline'} size={32} />
             </TouchableOpacity>
           </View>
         ) : (
           <View style={styles.bookmark}>
-            <TouchableOpacity key={item.id} onPress={() => setBookAsRead(item.id)}>
+            <TouchableOpacity key={item.id} onPress={() => setBookAsRead(item.id, item.read)}>
               <Ionicons name={'bookmark'} size={32} />
             </TouchableOpacity>
           </View>
