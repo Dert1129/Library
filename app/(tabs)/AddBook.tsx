@@ -225,48 +225,11 @@ const AddBookScreen = () => {
       error: errors.copies,
     },
   ];
-
-  // return (
-  //   <GestureHandlerRootView style={styles.rootContainer}>
-  //     <StatusBar barStyle="light-content" backgroundColor="black" translucent />
-  //     <FlatList
-  //       data={formFields}
-  //       keyExtractor={(item) => item.key}
-  //       removeClippedSubviews={false}
-  //       keyboardShouldPersistTaps="handled"
-  //       renderItem={({ item }) => (
-  //         <View style={styles.fieldContainer}>
-  //           <Text style={styles.label}>{item.label}</Text>
-  //           {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
-  //           {item.customComponent || (
-  //             <TextInput
-  //               style={styles.input}
-  //               value={item.value}
-  //               onChangeText={item.onChangeText}
-  //               placeholder={item.placeholder}
-                
-  //             />
-  //           )}
-  //         </View>
-  //       )}
-  //       ListFooterComponent={
-  //         <View style={styles.footer}>
-  //         <TouchableOpacity style={styles.clearButton} onPress={clearFields}>
-  //           <Text style={styles.clearButtonText}>Clear Fields</Text>
-  //         </TouchableOpacity>
-  //         <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-  //           <Text style={styles.clearButtonText}>Save Book</Text>
-  //         </TouchableOpacity>
-  //       </View>
-  //       }
-  //       contentContainerStyle={styles.contentContainer}
-  //     />
-  //   </GestureHandlerRootView>
-  // );
+  
   return (
     <GestureHandlerRootView style={styles.rootContainer}>
       <StatusBar barStyle="light-content" backgroundColor="black" translucent />
-      {/* <ScrollView contentContainerStyle={styles.contentContainer}> */}
+      <ScrollView>
       <View style={styles.contentContainer}>
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Title</Text>
@@ -345,8 +308,8 @@ const AddBookScreen = () => {
             <Text style={styles.clearButtonText}>Save Book</Text>
           </TouchableOpacity>
         </View>
-      {/* </ScrollView> */}
       </View>
+      </ScrollView>
     </GestureHandlerRootView>
   )
 };
