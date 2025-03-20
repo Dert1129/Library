@@ -43,6 +43,7 @@ export type RootStackParamList = {
     Scan: undefined;
     AddBook: {item: Book | null};
     EditBook: {item: Book};
+    Tracking: undefined;
 };
 
 export type BookInformationNavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookInformation'>;
@@ -65,7 +66,7 @@ export type BookInformationRouteProp = RouteProp<RootStackParamList, 'BookInform
     navigate: BookInformationNavigationProp;
 }
 
-export type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+export type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home' | "Tracking">;
 export type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>;
 export interface HomeScreenProps {
   navigation: HomeNavigationProp;
