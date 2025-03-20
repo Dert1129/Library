@@ -50,17 +50,14 @@ export default function Layout() {
         }}
       />
 
-      {/* <Tabs.Screen 
-        name="BookCarousel"
+      <Tabs.Screen 
+        name='Tracking'
         options={{
-          tabBarLabel: "Shuffle",
+          tabBarLabel: 'Tracking',
           tabBarIcon: ({color, focused}) => (
-            <TabBarIcon name={focused ? "menu" : 'menu-outline'} color={color} />
+            <TabBarIcon name={focused ? 'search' : 'search-outline'} color={color}/>
           ),
-          headerShown: false
-          
-        }}
-        /> */}
+        }}/>
      
     </Tabs>
   );
